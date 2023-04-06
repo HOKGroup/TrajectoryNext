@@ -24,19 +24,26 @@ const UserEmailsInput: React.FC = () => {
   }, []);
 
   return (
-    <form onSubmit={handleSubmit} onReset={handleReset}>
-      <label>
-        Paste User Emails
+    <form onSubmit={handleSubmit} onReset={handleReset} className="w-full">
+      <label className="block">
+        <h2 className="mb-2 text-lg font-semibold">Paste User Emails</h2>
         <textarea
           id="userEmails"
           name="userEmails"
           ref={userEmailsRef}
-          rows={10}
+          rows={5}
           cols={80}
+          className="mb-2 w-full border-2"
         />
       </label>
-      <button type="submit">Add</button>
-      <button type="reset">Clear</button>
+      <span className="flex select-none justify-end gap-2">
+        <button type="submit" className="rounded-md border-2 px-2">
+          Add
+        </button>
+        <button type="reset" className="rounded-md border-2 px-2">
+          Clear
+        </button>
+      </span>
       <output htmlFor="userEmails">
         {errors?.map((err) => `Invalid input: ${err}`)}
       </output>
