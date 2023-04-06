@@ -1,3 +1,6 @@
+import groupBy from 'lodash/groupBy';
+import pickBy from 'lodash/pickBy';
+
 export enum ParsedUserResultType {
   Error = 'error',
   Success = 'success',
@@ -45,7 +48,7 @@ function parseUserEmail(input: string): ParsedUserResult {
   if (!matches)
     return {
       type: ParsedUserResultType.Error,
-      value: input,
+      value: `Invalid input: ${input}`,
     };
 
   return {
@@ -64,25 +67,50 @@ export interface ParseUserEmailsResult {
   errors: Array<string>;
 }
 
-export function parseUserEmails(input: string): ParseUserEmailsResult {
-  const resultArr = input.split(';').map((str) => parseUserEmail(str.trim()));
+function validateUniqueEmails(parseResult: ParseUserEmailsResult) {
+  const grouped = groupBy(parseResult.values, (v) => v.emailAddress);
+  const duplicates = pickBy(grouped, (x) => x.length > 1);
 
+  const duplicateEmailAddresses = Object.keys(duplicates);
+
+  if (duplicateEmailAddresses.length === 0) {
+    return parseResult;
+  }
+
+  return {
+    ...parseResult,
+    success: false,
+    values: parseResult.values.filter((v) => !duplicates[v.emailAddress]),
+    errors: [
+      ...parseResult.errors,
+      ...duplicateEmailAddresses.map((e) => `Duplicate email: ${e}`),
+    ],
+  };
+}
+
+export function parseUserEmails(input: string): ParseUserEmailsResult {
   const initialValue: ParseUserEmailsResult = {
     success: true,
     values: [],
     errors: [],
   };
 
-  return input.split(';').reduce((acc, str) => {
-    const parsed = parseUserEmail(str.trim());
+  const parsed = input
+    .split(';')
+    .map((str) => str.trim())
+    .filter((str) => str.length > 0)
+    .reduce((acc, str) => {
+      const parsed = parseUserEmail(str);
 
-    if (parsed.type == ParsedUserResultType.Error) {
-      acc.success = false;
-      acc.errors.push(parsed.value);
-    } else {
-      acc.values.push(parsed.value);
-    }
+      if (parsed.type == ParsedUserResultType.Error) {
+        acc.success = false;
+        acc.errors.push(parsed.value);
+      } else {
+        acc.values.push(parsed.value);
+      }
 
-    return acc;
-  }, initialValue);
+      return acc;
+    }, initialValue);
+
+  return validateUniqueEmails(parsed);
 }
