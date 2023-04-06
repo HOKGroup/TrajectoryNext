@@ -93,7 +93,7 @@ describe('parseUserEmails', () => {
 
     const error = parsed.errors[0];
 
-    expect(error).toEqual('invalidinput');
+    expect(error).toEqual('Invalid input: invalidinput');
   });
 
   test('returns multiple errors for multiple invalid inputs separated by semicolons', () => {
@@ -116,6 +116,38 @@ describe('parseUserEmails', () => {
       },
     ]);
 
-    expect(parsed.errors).toEqual(['invalid1', 'invalid2']);
+    expect(parsed.errors).toEqual([
+      'Invalid input: invalid1',
+      'Invalid input: invalid2',
+    ]);
+  });
+
+  test('returns an error for duplicate email addresses', () => {
+    const input =
+      'User One <uone@example.com>; User Two <utwo@example.com>; Duplicate User <uone@example.com>';
+    const parsed = parseUserEmails(input);
+
+    expect(parsed.success).toBeFalsy();
+
+    expect(parsed.values).toEqual([
+      {
+        firstName: 'User',
+        lastName: 'Two',
+        emailAddress: 'utwo@example.com',
+      },
+    ]);
+
+    expect(parsed.errors).toEqual(['Duplicate email: uone@example.com']);
+  });
+
+  test('returns an error for only duplicate email addresses with a semicolon at the end', () => {
+    const input = 'User One <uone@example.com>; User Two <uone@example.com>;';
+    const parsed = parseUserEmails(input);
+
+    expect(parsed.success).toBeFalsy();
+
+    expect(parsed.values.length).toEqual(0);
+
+    expect(parsed.errors).toEqual(['Duplicate email: uone@example.com']);
   });
 });

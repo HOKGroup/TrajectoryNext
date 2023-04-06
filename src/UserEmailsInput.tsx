@@ -1,7 +1,11 @@
 import { FormEvent, useCallback, useRef, useState } from 'react';
-import { parseUserEmails } from './parseUserEmails';
+import { ParsedUser, parseUserEmails } from './parseUserEmails';
 
-const UserEmailsInput: React.FC = () => {
+interface Props {
+  setParsedUsers: (parsedUsers: Array<ParsedUser>) => void;
+}
+
+const UserEmailsInput: React.FC<Props> = ({ setParsedUsers }) => {
   const userEmailsRef = useRef<HTMLTextAreaElement>(null);
 
   const [errors, setErrors] = useState(undefined as string[] | undefined);
@@ -16,6 +20,7 @@ const UserEmailsInput: React.FC = () => {
       setErrors(parsed.errors);
     } else {
       setErrors(undefined);
+      setParsedUsers(parsed.values);
     }
   }, []);
 
@@ -25,18 +30,18 @@ const UserEmailsInput: React.FC = () => {
 
   return (
     <form onSubmit={handleSubmit} onReset={handleReset} className="w-full">
-      <label className="block">
-        <h2 className="mb-2 text-lg font-semibold">Paste User Emails</h2>
+      <label>
+        <h2 className="mb-2 text-xl font-semibold">Paste User Emails</h2>
         <textarea
           id="userEmails"
           name="userEmails"
           ref={userEmailsRef}
           rows={5}
           cols={80}
-          className="mb-2 w-full border-2"
+          className="block w-full border-2"
         />
       </label>
-      <span className="flex select-none justify-end gap-2">
+      <span className="mt-2 flex justify-end gap-2">
         <button type="submit" className="rounded-md border-2 px-2">
           Add
         </button>
@@ -44,8 +49,10 @@ const UserEmailsInput: React.FC = () => {
           Clear
         </button>
       </span>
-      <output htmlFor="userEmails">
-        {errors?.map((err) => `Invalid input: ${err}`)}
+      <output htmlFor="userEmails" className="text-red-700">
+        {errors?.map((err, idx) => (
+          <div key={idx}>{err}</div>
+        ))}
       </output>
     </form>
   );
