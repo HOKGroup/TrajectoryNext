@@ -45,7 +45,7 @@ const UserEmailsInput: React.FC<Props> = ({ enabled, setParsedUsers }) => {
   return (
     <form className="mb-8 w-full">
       <label className="block">
-        <h2 className="mb-2 text-xl font-semibold">Paste User Emails</h2>
+        <h2 className="mb-3 text-xl font-semibold">Paste User Emails</h2>
         <textarea
           onChange={handleInput}
           value={userEmails}
@@ -59,7 +59,7 @@ const UserEmailsInput: React.FC<Props> = ({ enabled, setParsedUsers }) => {
           className="block w-full rounded-md border-2 px-2 py-1 outline-none focus:border-transparent focus:ring focus:ring-blue-300 enabled:bg-white disabled:cursor-not-allowed disabled:bg-slate-100 dark:text-slate-950 dark:disabled:bg-slate-200"
         />
       </label>
-      <span className="mt-4 flex justify-between gap-4 md:justify-start">
+      <span className="mt-3 flex justify-between gap-4 md:justify-start">
         <Button
           buttonType={ButtonType.Primary}
           type="submit"

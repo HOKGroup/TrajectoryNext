@@ -90,8 +90,8 @@ describe('parseUserEmails', () => {
 
     expect(parsed.values).toEqual([
       {
-        firstName: undefined,
-        lastName: undefined,
+        firstName: null,
+        lastName: null,
         emailAddress: 'jdoe@example.com',
       },
     ]);
@@ -105,8 +105,8 @@ describe('parseUserEmails', () => {
 
     expect(parsed.values).toEqual([
       {
-        firstName: undefined,
-        lastName: undefined,
+        firstName: null,
+        lastName: null,
         emailAddress: 'jdoe@example.com',
       },
     ]);
