@@ -3,6 +3,11 @@ import { ParsedUser } from './parseUserEmails';
 import Button, { ButtonType } from './components/Button';
 import Select from './components/Select';
 import { type SingleValue } from 'react-select';
+import TableRow from './components/Table/TableRow';
+import Table from './components/Table/Table';
+import TableHeaderCell from './components/Table/TableHeaderCell';
+import TableDataCell from './components/Table/TableDataCell';
+import Section from './components/Section';
 
 interface Props {
   enabled: boolean;
@@ -102,38 +107,32 @@ const DefineUsers: React.FC<Props> = ({ enabled, parsedUsers }) => {
     };
 
   return (
-    <div className="mb-8">
-      <h2 className="mb-3 text-xl font-semibold">Define Users</h2>
+    <Section title="Define Users">
       <div className="overflow-x-auto">
-        <table className="min-w-full table-fixed text-left text-sm lg:text-base">
+        <Table className="min-w-full table-fixed">
           <thead>
-            <tr className="border-2 border-slate-950 bg-slate-950 text-slate-50 dark:border-slate-50 dark:bg-slate-50 dark:text-slate-950">
-              <th scope="col" className="min-w-[8rem] p-2">
-                First
-              </th>
-              <th scope="col" className="p-2" />
-              <th scope="col" className="min-w-[8rem] p-2">
-                Last
-              </th>
-              <th scope="col" className="min-w-[10rem] p-2">
+            <TableRow isHeader={true}>
+              <TableHeaderCell className="min-w-[8rem]">First</TableHeaderCell>
+              <TableHeaderCell />
+              <TableHeaderCell className="min-w-[8rem]">Last</TableHeaderCell>
+              <TableHeaderCell className="min-w-[10rem] p-2">
                 Email
-              </th>
-              <th scope="col" className="min-w-[10rem] p-2">
+              </TableHeaderCell>
+              <TableHeaderCell className="min-w-[10rem] p-2">
                 Discipline
-              </th>
-              <th scope="col" className="min-w-[15rem] p-2">
+              </TableHeaderCell>
+              <TableHeaderCell className="min-w-[15rem] p-2">
                 Role
-              </th>
-            </tr>
+              </TableHeaderCell>
+            </TableRow>
           </thead>
           <tbody>
             {users.map((user, idx) => (
-              <tr
-                className="border-2 odd:bg-white even:bg-slate-100 dark:odd:bg-slate-800 dark:even:bg-slate-900"
-                key={user.emailAddress}
-              >
-                <td className="break-all p-2">{user.firstName}</td>
-                <td className="p-2">
+              <TableRow key={user.emailAddress}>
+                <TableDataCell className="break-all">
+                  {user.firstName}
+                </TableDataCell>
+                <TableDataCell>
                   <Button
                     buttonType={ButtonType.Secondary}
                     className="!p-1 text-sm font-extrabold"
@@ -141,10 +140,14 @@ const DefineUsers: React.FC<Props> = ({ enabled, parsedUsers }) => {
                   >
                     {'<>'}
                   </Button>
-                </td>
-                <td className="break-all p-2">{user.lastName}</td>
-                <td className="break-all p-2">{user.emailAddress}</td>
-                <td className="p-2">
+                </TableDataCell>
+                <TableDataCell className="break-all">
+                  {user.lastName}
+                </TableDataCell>
+                <TableDataCell className="break-all">
+                  {user.emailAddress}
+                </TableDataCell>
+                <TableDataCell>
                   <Select
                     menuPortalTarget={document.body}
                     options={placeholderDisciplines.map((d) => ({
@@ -158,8 +161,8 @@ const DefineUsers: React.FC<Props> = ({ enabled, parsedUsers }) => {
                         : null
                     }
                   />
-                </td>
-                <td className="p-2">
+                </TableDataCell>
+                <TableDataCell>
                   <Select
                     menuPortalTarget={document.body}
                     options={placeholderRoles.map((r) => ({
@@ -171,11 +174,11 @@ const DefineUsers: React.FC<Props> = ({ enabled, parsedUsers }) => {
                       user.role ? { value: user.role, label: user.role } : null
                     }
                   />
-                </td>
-              </tr>
+                </TableDataCell>
+              </TableRow>
             ))}
           </tbody>
-        </table>
+        </Table>
       </div>
       <span className="mt-3 flex justify-between gap-4 md:justify-start">
         <Button
@@ -196,7 +199,7 @@ const DefineUsers: React.FC<Props> = ({ enabled, parsedUsers }) => {
           Cancel
         </Button>
       </span>
-    </div>
+    </Section>
   );
 };
 
