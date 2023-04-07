@@ -7,8 +7,8 @@ export enum ParsedUserResultType {
 }
 
 export interface ParsedUser {
-  firstName: string | undefined;
-  lastName: string | undefined;
+  firstName: string | null;
+  lastName: string | null;
   emailAddress: string;
 }
 
@@ -53,8 +53,8 @@ function parseUserEmail(input: string): ParsedUserResult {
       return {
         type: ParsedUserResultType.Success,
         value: {
-          firstName: undefined,
-          lastName: undefined,
+          firstName: null,
+          lastName: null,
           emailAddress: emailMatch[1],
         },
       };

@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
-import Select, { type SingleValue } from 'react-select';
+import { type SingleValue } from 'react-select';
+import Select from './components/Select';
 
 interface Project {
   id: string;
@@ -54,32 +55,18 @@ const SelectProject: React.FC<Props> = ({
 
   return (
     <div className="mb-8">
-      <h2 className="mb-2 text-xl font-semibold">Select Project</h2>
+      <h2 className="mb-3 text-xl font-semibold">Select Project</h2>
       <Select
-        unstyled={true}
-        isClearable={true}
         onChange={onChange}
         options={placeholderProjects.map((p) => ({
           value: p.id,
           label: p.name,
         }))}
-        classNames={{
-          dropdownIndicator: (_state) => 'text-slate-950/50 cursor-pointer',
-          indicatorSeparator: (_state) => 'bg-black/20 mx-2',
-          clearIndicator: (_state) => 'text-slate-950/50 cursor-pointer',
-          control: (state) =>
-            'border-2 px-2 rounded-md focus:outline-none bg-white' +
-            (state.isFocused
-              ? ' ring ring-blue-300 outline-none border-0'
-              : '') +
-            (selectedProject ? ' text-slate-950' : ' text-slate-950/50'),
-          menu: (_state) =>
-            'mt-2 border-2 bg-white rounded-md drop-shadow-md dark:text-slate-950',
-          option: (state) =>
-            'px-2 leading-10' +
-            (state.isFocused ? ' bg-blue-200' : '') +
-            (state.isSelected ? ' bg-blue-500 text-white' : ''),
-        }}
+        selectedValue={
+          selectedProject
+            ? { value: selectedProject.id, label: selectedProject.name }
+            : null
+        }
       />
     </div>
   );
