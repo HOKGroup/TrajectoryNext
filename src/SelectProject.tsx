@@ -64,16 +64,17 @@ const SelectProject: React.FC<Props> = ({
           label: p.name,
         }))}
         classNames={{
-          dropdownIndicator: (_state) => 'text-black/50 cursor-pointer',
+          dropdownIndicator: (_state) => 'text-slate-950/50 cursor-pointer',
           indicatorSeparator: (_state) => 'bg-black/20 mx-2',
-          clearIndicator: (_state) => 'text-black/50 cursor-pointer',
+          clearIndicator: (_state) => 'text-slate-950/50 cursor-pointer',
           control: (state) =>
             'border-2 px-2 rounded-md focus:outline-none bg-white' +
             (state.isFocused
               ? ' ring ring-blue-300 outline-none border-0'
               : '') +
-            (selectedProject ? ' text-black' : ' text-black/50'),
-          menu: (_state) => 'mt-2 border-2 bg-white rounded-md drop-shadow-md',
+            (selectedProject ? ' text-slate-950' : ' text-slate-950/50'),
+          menu: (_state) =>
+            'mt-2 border-2 bg-white rounded-md drop-shadow-md dark:text-slate-950',
           option: (state) =>
             'px-2 leading-10' +
             (state.isFocused ? ' bg-blue-200' : '') +

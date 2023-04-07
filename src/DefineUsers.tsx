@@ -35,46 +35,53 @@ const DefineUsers: React.FC<Props> = ({ enabled, parsedUsers }) => {
   return (
     <div className="mb-8">
       <h2 className="mb-2 text-xl font-semibold">Define Users</h2>
-      <table className="w-full text-left">
-        <thead>
-          <tr className="bg-black text-white">
-            <th scope="col" className="p-2">
-              First
-            </th>
-            <th scope="col" className="p-2">
-              Last
-            </th>
-            <th scope="col" className="p-2">
-              Email
-            </th>
-            <th scope="col" className="p-2">
-              Discipline
-            </th>
-            <th scope="col" className="p-2">
-              Role
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map((user, idx) => (
-            <tr
-              className="border-2 odd:bg-white even:bg-slate-100"
-              key={user.emailAddress}
-            >
-              <td className="flex justify-between p-2">
-                {user.firstName}
-                <button onClick={() => swapFirstAndLastName(idx)}>
-                  {'<>'}
-                </button>
-              </td>
-              <td className="p-2">{user.lastName}</td>
-              <td className="p-2">{user.emailAddress}</td>
-              <td className="p-2"></td>
-              <td className="p-2"></td>
+      <div className="overflow-x-auto">
+        <table className="w-full text-left">
+          <thead>
+            <tr className="border-2 border-slate-950 bg-slate-950 text-slate-50 dark:border-slate-50 dark:bg-slate-50 dark:text-slate-950">
+              <th scope="col" className="p-2">
+                First
+              </th>
+              <th scope="col"></th>
+              <th scope="col" className="border-r-2 p-2">
+                Last
+              </th>
+              <th scope="col" className="p-2">
+                Email
+              </th>
+              <th scope="col" className="p-2">
+                Discipline
+              </th>
+              <th scope="col" className="p-2">
+                Role
+              </th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {users.map((user, idx) => (
+              <tr
+                className="border-2 odd:bg-white even:bg-slate-100 dark:odd:bg-slate-800 dark:even:bg-slate-900"
+                key={user.emailAddress}
+              >
+                <td className="p-2">{user.firstName}</td>
+                <td className="p-2">
+                  <Button
+                    buttonType={ButtonType.Secondary}
+                    className="!p-1 text-sm font-extrabold"
+                    onClick={() => swapFirstAndLastName(idx)}
+                  >
+                    {'<>'}
+                  </Button>
+                </td>
+                <td className="border-r-2 p-2">{user.lastName}</td>
+                <td className="p-2">{user.emailAddress}</td>
+                <td className="p-2"></td>
+                <td className="p-2"></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
       <span className="mt-4 flex justify-between gap-4 md:justify-start">
         <Button
           buttonType={ButtonType.Primary}
@@ -85,7 +92,7 @@ const DefineUsers: React.FC<Props> = ({ enabled, parsedUsers }) => {
           Submit
         </Button>
         <Button
-          buttonType={ButtonType.Secondary}
+          buttonType={ButtonType.Warning}
           type="reset"
           disabled={!enabled || !users.length}
           onClick={handleCancel}

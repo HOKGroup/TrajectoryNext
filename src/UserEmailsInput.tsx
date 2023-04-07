@@ -56,7 +56,7 @@ const UserEmailsInput: React.FC<Props> = ({ enabled, setParsedUsers }) => {
           cols={80}
           autoCorrect="off"
           spellCheck={false}
-          className="block w-full rounded-md border-2 px-2 py-1 outline-none focus:border-transparent focus:ring focus:ring-blue-300 enabled:bg-white disabled:cursor-not-allowed disabled:bg-slate-100"
+          className="block w-full rounded-md border-2 px-2 py-1 outline-none focus:border-transparent focus:ring focus:ring-blue-300 enabled:bg-white disabled:cursor-not-allowed disabled:bg-slate-100 dark:text-slate-950 dark:disabled:bg-slate-200"
         />
       </label>
       <span className="mt-4 flex justify-between gap-4 md:justify-start">
@@ -70,7 +70,7 @@ const UserEmailsInput: React.FC<Props> = ({ enabled, setParsedUsers }) => {
           Add
         </Button>
         <Button
-          buttonType={ButtonType.Secondary}
+          buttonType={ButtonType.Warning}
           type="reset"
           disabled={!enabled || !userEmails.length}
           onClick={handleReset}

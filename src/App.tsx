@@ -17,8 +17,8 @@ function App() {
   const [parsedUsers, setParsedUsers] = useState([] as ParsedUser[]);
 
   return (
-    <main className="container py-4">
-      <h1 className="text-2xl font-bold md:my-2">Trajectory Next</h1>
+    <main className="container pt-4 md:pt-8">
+      <h1 className="mb-4 text-2xl font-bold">Trajectory Next</h1>
       <SelectProject
         setSelectedProject={setSelectedProject}
         selectedProject={selectedProject}

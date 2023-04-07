@@ -7,8 +7,8 @@ export enum ParsedUserResultType {
 }
 
 export interface ParsedUser {
-  firstName: string;
-  lastName: string;
+  firstName: string | undefined;
+  lastName: string | undefined;
   emailAddress: string;
 }
 
@@ -45,11 +45,26 @@ const parseRegExp = RegExp(
 function parseUserEmail(input: string): ParsedUserResult {
   const matches = input.match(parseRegExp);
 
-  if (!matches)
+  if (!matches) {
+    // try matching as email address with no name
+    const emailMatch = input.match(/<?(.+@[^>]+)>?/);
+
+    if (emailMatch) {
+      return {
+        type: ParsedUserResultType.Success,
+        value: {
+          firstName: undefined,
+          lastName: undefined,
+          emailAddress: emailMatch[1],
+        },
+      };
+    }
+
     return {
       type: ParsedUserResultType.Error,
       value: `Invalid input: ${input}`,
     };
+  }
 
   return {
     type: ParsedUserResultType.Success,

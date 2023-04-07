@@ -82,6 +82,36 @@ describe('parseUserEmails', () => {
     ]);
   });
 
+  test('parses an email address in angle brackets with no name', () => {
+    const input = '<jdoe@example.com>';
+    const parsed = parseUserEmails(input);
+
+    expect(parsed.success).toBeTruthy();
+
+    expect(parsed.values).toEqual([
+      {
+        firstName: undefined,
+        lastName: undefined,
+        emailAddress: 'jdoe@example.com',
+      },
+    ]);
+  });
+
+  test('parses an email address with no angle brackets and no name', () => {
+    const input = 'jdoe@example.com';
+    const parsed = parseUserEmails(input);
+
+    expect(parsed.success).toBeTruthy();
+
+    expect(parsed.values).toEqual([
+      {
+        firstName: undefined,
+        lastName: undefined,
+        emailAddress: 'jdoe@example.com',
+      },
+    ]);
+  });
+
   test('returns an error on invalid input', () => {
     const input = 'invalidinput';
     const parsed = parseUserEmails(input);
