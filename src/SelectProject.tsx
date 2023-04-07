@@ -49,11 +49,11 @@ const SelectProject: React.FC<Props> = ({
         setSelectedProject(null);
       }
     },
-    []
+    [setSelectedProject]
   );
 
   return (
-    <div className="mb-6">
+    <div className="mb-8">
       <h2 className="mb-2 text-xl font-semibold">Select Project</h2>
       <Select
         unstyled={true}

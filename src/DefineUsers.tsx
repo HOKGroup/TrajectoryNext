@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { ParsedUser } from './parseUserEmails';
+import Button, { ButtonType } from './components/Button';
 
 interface Props {
   enabled: boolean;
@@ -32,24 +33,24 @@ const DefineUsers: React.FC<Props> = ({ enabled, parsedUsers }) => {
   }, []);
 
   return (
-    <div className="mb-6">
+    <div className="mb-8">
       <h2 className="mb-2 text-xl font-semibold">Define Users</h2>
-      <table className="text-md w-full text-left">
+      <table className="w-full text-left">
         <thead>
           <tr className="bg-black text-white">
-            <th scope="col" className="px-2 py-2">
+            <th scope="col" className="p-2">
               First
             </th>
-            <th scope="col" className="px-2 py-2">
+            <th scope="col" className="p-2">
               Last
             </th>
-            <th scope="col" className="px-2 py-2">
+            <th scope="col" className="p-2">
               Email
             </th>
-            <th scope="col" className="px-2 py-2">
+            <th scope="col" className="p-2">
               Discipline
             </th>
-            <th scope="col" className="px-2 py-2">
+            <th scope="col" className="p-2">
               Role
             </th>
           </tr>
@@ -60,36 +61,38 @@ const DefineUsers: React.FC<Props> = ({ enabled, parsedUsers }) => {
               className="border-2 odd:bg-white even:bg-slate-100"
               key={user.emailAddress}
             >
-              <td className="flex justify-between px-2 py-2">
+              <td className="flex justify-between p-2">
                 {user.firstName}
                 <button onClick={() => swapFirstAndLastName(idx)}>
                   {'<>'}
                 </button>
               </td>
-              <td className="px-2 py-2">{user.lastName}</td>
-              <td className="px-2 py-2">{user.emailAddress}</td>
-              <td className="px-2 py-2"></td>
-              <td className="px-2 py-2"></td>
+              <td className="p-2">{user.lastName}</td>
+              <td className="p-2">{user.emailAddress}</td>
+              <td className="p-2"></td>
+              <td className="p-2"></td>
             </tr>
           ))}
         </tbody>
       </table>
-      <span className="mt-4 flex justify-end gap-4">
-        <button
+      <span className="mt-4 flex justify-between gap-4 md:justify-start">
+        <Button
+          buttonType={ButtonType.Primary}
           type="submit"
-          disabled={!enabled}
-          className="rounded-md bg-blue-500 px-4 py-1 text-white outline-none enabled:hover:bg-blue-600 enabled:focus:ring enabled:focus:ring-blue-400 disabled:cursor-not-allowed disabled:bg-blue-400"
+          disabled={!enabled || !users.length} // TODO: check whether all fields are complete for each user
+          className="order-last grow md:order-1 md:grow-0"
         >
           Submit
-        </button>
-        <button
+        </Button>
+        <Button
+          buttonType={ButtonType.Secondary}
           type="reset"
-          disabled={!enabled || !users.length} // TODO: check whether all fields are complete for each user
+          disabled={!enabled || !users.length}
           onClick={handleCancel}
-          className="rounded-md bg-yellow-500 px-4 py-1 text-white outline-none enabled:hover:bg-yellow-400 enabled:focus:ring enabled:focus:ring-yellow-400 disabled:cursor-not-allowed disabled:bg-yellow-400"
+          className="order-first grow md:order-2 md:grow-0"
         >
           Cancel
-        </button>
+        </Button>
       </span>
     </div>
   );
