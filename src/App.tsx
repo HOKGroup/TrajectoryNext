@@ -3,6 +3,7 @@ import UserEmailsInput from './UserEmailsInput';
 import { ParsedUser } from './parseUserEmails';
 import DefineUsers from './DefineUsers';
 import SelectProject from './SelectProject';
+import ExistingTeam from './ExistingTeam';
 
 interface Project {
   id: string;
@@ -28,6 +29,7 @@ function App() {
         setParsedUsers={setParsedUsers}
       />
       <DefineUsers enabled={!!selectedProject} parsedUsers={parsedUsers} />
+      <ExistingTeam existingUsers={[]} />
     </main>
   );
 }

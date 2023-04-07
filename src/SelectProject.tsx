@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import { type SingleValue } from 'react-select';
 import Select from './components/Select';
+import Section from './components/Section';
 
 interface Project {
   id: string;
@@ -54,8 +55,7 @@ const SelectProject: React.FC<Props> = ({
   );
 
   return (
-    <div className="mb-8">
-      <h2 className="mb-3 text-xl font-semibold">Select Project</h2>
+    <Section title="Select Project">
       <Select
         onChange={onChange}
         options={placeholderProjects.map((p) => ({
@@ -68,7 +68,7 @@ const SelectProject: React.FC<Props> = ({
             : null
         }
       />
-    </div>
+    </Section>
   );
 };
 

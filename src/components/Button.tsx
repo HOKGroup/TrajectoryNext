@@ -1,4 +1,8 @@
-import { type FC, ButtonHTMLAttributes, DetailedHTMLProps } from 'react';
+import {
+  type FC,
+  type ButtonHTMLAttributes,
+  type DetailedHTMLProps,
+} from 'react';
 
 export enum ButtonType {
   Primary,
