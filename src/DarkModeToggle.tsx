@@ -1,33 +1,12 @@
-import {
-  useCallback,
-  useState,
-  useEffect,
-  useRef,
-  type FC,
-  type HTMLProps,
-} from 'react';
+import { useCallback, useState, useEffect, useRef, type FC } from 'react';
 import Button, { ButtonType } from './components/Button';
-import iconSun from './assets/icons/sun-regular.svg';
-import iconMoon from './assets/icons/moon-regular.svg';
-import iconSystem from './assets/icons/display-solid.svg';
-import iconChevronDown from './assets/icons/chevron-down-solid.svg';
+import {
+  IconSun,
+  IconMoon,
+  IconSystem,
+  IconChevronDown,
+} from './components/Icons';
 import classNames from 'classnames';
-
-const IconSun = (props: HTMLProps<HTMLImageElement>) => (
-  <img src={iconSun} alt="Light Mode" {...props} />
-);
-
-const IconMoon = (props: HTMLProps<HTMLImageElement>) => (
-  <img src={iconMoon} alt="Dark Mode" {...props} />
-);
-
-const IconSystem = (props: HTMLProps<HTMLImageElement>) => (
-  <img src={iconSystem} alt="System" {...props} />
-);
-
-const IconChevronDown = (props: HTMLProps<HTMLImageElement>) => (
-  <img src={iconChevronDown} {...props} />
-);
 
 const getIsDarkMode = () => {
   return (
