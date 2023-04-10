@@ -1,30 +1,21 @@
-import ReactSelect, { type SingleValue } from 'react-select';
+import ReactSelect, {
+  type SingleValue,
+  type Props,
+  type GroupBase,
+} from 'react-select';
 
-interface Option {
-  value: string;
-  label: string;
-}
-
-interface Props {
-  options: Option[];
-  onChange: (newValue: SingleValue<Option>) => void;
-  selectedValue: Option | null;
-  menuPortalTarget?: HTMLElement | null | undefined;
-}
-
-const Select: React.FC<Props> = ({
-  options,
-  onChange,
-  selectedValue,
-  menuPortalTarget,
-}) => {
+function Select<
+  Option,
+  IsMulti extends boolean = false,
+  Group extends GroupBase<Option> = GroupBase<Option>
+>(
+  props: Props<Option, IsMulti, Group> & { selectedValue: SingleValue<Option> }
+) {
   return (
     <ReactSelect
       unstyled={true}
       isClearable={true}
-      onChange={onChange}
-      options={options}
-      menuPortalTarget={menuPortalTarget}
+      {...props}
       classNames={{
         dropdownIndicator: (_state) => 'text-black/50 cursor-pointer',
         indicatorSeparator: (_state) => 'bg-black/20 mx-2',
@@ -34,15 +25,16 @@ const Select: React.FC<Props> = ({
           (state.isFocused
             ? ' ring ring-blue-300 outline-none border-transparent'
             : '') +
-          (selectedValue ? ' text-black' : ' text-black/50'),
+          (props.selectedValue ? ' text-black' : ' text-black/50'),
         menu: (_state) => 'mt-2 border-2 bg-white rounded-md drop-shadow-md',
+        noOptionsMessage: (_state) => 'text-black/50',
         option: (state) =>
-          'px-2 leading-8' +
+          'px-2 leading-9 dark:text-slate-950' +
           (state.isFocused ? ' bg-blue-200' : '') +
-          (state.isSelected ? ' bg-blue-500 text-white' : ''),
+          (state.isSelected ? ' bg-blue-500 !text-white' : ''),
       }}
     />
   );
-};
+}
 
 export default Select;
