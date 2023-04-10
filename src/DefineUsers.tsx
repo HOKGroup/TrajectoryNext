@@ -29,24 +29,13 @@ const DefineUsers: React.FC<Props> = ({ enabled, parsedUsers }) => {
   const [users, setUsers] = useState([] as DefinedUser[]);
 
   useEffect(() => {
-    setUsers((users) => {
-      const existingDefinedUsersMap = users.reduce((acc, u) => {
-        acc.set(u.emailAddress, u);
-        return acc;
-      }, new Map<string, DefinedUser>());
+    const stateUsers = parsedUsers.map((u) => ({
+      ...u,
+      discipline: null,
+      role: null,
+    }));
 
-      const definedUsers = parsedUsers.map((u) => {
-        const existingDefinedUser = existingDefinedUsersMap.get(u.emailAddress);
-
-        return {
-          ...u,
-          discipline: existingDefinedUser?.discipline ?? null,
-          role: existingDefinedUser?.role ?? null,
-        };
-      });
-
-      return definedUsers;
-    });
+    setUsers(stateUsers);
   }, [parsedUsers]);
 
   const handleCancel = useCallback(() => {
