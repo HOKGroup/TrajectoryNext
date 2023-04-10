@@ -2,6 +2,7 @@ import { useCallback } from 'react';
 import { type SingleValue } from 'react-select';
 import Select from './components/Select';
 import Section from './components/Section';
+import SectionHeading from './components/SectionHeading';
 
 interface Project {
   id: string;
@@ -54,9 +55,13 @@ const SelectProject: React.FC<Props> = ({
     [setSelectedProject]
   );
 
+  const noOptionsMessage = useCallback(() => 'No projects found.', []);
+
   return (
-    <Section title="Select Project">
+    <Section>
+      <SectionHeading id="selectProject">Select Project</SectionHeading>
       <Select
+        aria-labelledby="selectProject"
         onChange={onChange}
         options={placeholderProjects.map((p) => ({
           value: p.id,
@@ -67,6 +72,7 @@ const SelectProject: React.FC<Props> = ({
             ? { value: selectedProject.id, label: selectedProject.name }
             : null
         }
+        noOptionsMessage={noOptionsMessage}
       />
     </Section>
   );

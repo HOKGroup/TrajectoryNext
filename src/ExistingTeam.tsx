@@ -1,6 +1,9 @@
 import Section from './components/Section';
+import SectionHeading from './components/SectionHeading';
 import Table from './components/Table/Table';
+import TableBody from './components/Table/TableBody';
 import TableDataCell from './components/Table/TableDataCell';
+import TableHead from './components/Table/TableHead';
 import TableHeaderCell from './components/Table/TableHeaderCell';
 import TableRow from './components/Table/TableRow';
 
@@ -35,41 +38,55 @@ const placeholderServices = [
 
 const ExistingTeam: React.FC<Props> = ({ existingUsers }) => {
   return (
-    <Section title="Existing Team">
+    <Section>
+      <SectionHeading>Existing Team</SectionHeading>
       <div className="overflow-x-auto">
         <Table className="min-w-full table-fixed">
-          <thead>
+          <TableHead>
             <TableRow isHeader={true}>
-              <TableHeaderCell className="min-w-[8rem]">First</TableHeaderCell>
-              <TableHeaderCell className="min-w-[8rem]">Last</TableHeaderCell>
-              <TableHeaderCell className="min-w-[10rem]">Email</TableHeaderCell>
-              <TableHeaderCell className="min-w-[10rem]">
-                Discipline
-              </TableHeaderCell>
-              <TableHeaderCell className="min-w-[12rem]">Role</TableHeaderCell>
+              <TableHeaderCell>First</TableHeaderCell>
+              <TableHeaderCell>Last</TableHeaderCell>
+              <TableHeaderCell>Email</TableHeaderCell>
+              <TableHeaderCell>Discipline</TableHeaderCell>
+              <TableHeaderCell>Role</TableHeaderCell>
               {placeholderServices.map((s) => (
-                <TableHeaderCell key={s.id} className="min-w-[10rem]">
-                  {s.name}
-                </TableHeaderCell>
+                <TableHeaderCell key={s.id}>{s.name}</TableHeaderCell>
               ))}
             </TableRow>
-          </thead>
-          <tbody>
+          </TableHead>
+          <TableBody>
             {existingUsers.map((user, _idx) => (
               <TableRow key={user.emailAddress}>
-                <TableDataCell>{user.firstName}</TableDataCell>
-                <TableDataCell>{user.lastName}</TableDataCell>
-                <TableDataCell>{user.emailAddress}</TableDataCell>
-                <TableDataCell>{user.discipline}</TableDataCell>
-                <TableDataCell>{user.role}</TableDataCell>
+                <TableDataCell data-label="First">
+                  {user.firstName}
+                </TableDataCell>
+                <TableDataCell data-label="Last">{user.lastName}</TableDataCell>
+                <TableDataCell data-label="Email">
+                  {user.emailAddress}
+                </TableDataCell>
+                <TableDataCell data-label="Discipline">
+                  {user.discipline}
+                </TableDataCell>
+                <TableDataCell data-label="Role">{user.role}</TableDataCell>
                 {placeholderServices.map((s) => (
-                  <TableDataCell key={s.id}>
+                  <TableDataCell
+                    key={s.id}
+                    data-label={s.name}
+                    className="break-normal"
+                  >
                     {/* TODO: Service status */}
                   </TableDataCell>
                 ))}
               </TableRow>
             ))}
-          </tbody>
+            {!existingUsers.length && (
+              <TableRow>
+                <TableDataCell colSpan={5 + placeholderServices.length}>
+                  No existing team members.
+                </TableDataCell>
+              </TableRow>
+            )}
+          </TableBody>
         </Table>
       </div>
     </Section>

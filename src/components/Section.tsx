@@ -1,33 +1,15 @@
-import {
-  type FC,
-  type ReactNode,
-  type DetailedHTMLProps,
-  type HTMLAttributes,
-} from 'react';
+import { type FC, type HTMLProps } from 'react';
+import classNames from 'classnames';
 
-interface Props {
-  title?: ReactNode;
-  headingClassName?: string | undefined;
-}
-
-const Section: FC<
-  Props & DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement>
-> = ({
-  title,
+const Section: FC<HTMLProps<HTMLElement>> = ({
   children,
   className: propsClassName,
-  headingClassName: propsHeadingClassName,
   ...props
 }) => {
-  const className = 'mb-8' + (propsClassName ? ` ${propsClassName}` : '');
-
-  const headingClassName =
-    'mb-3 text-xl font-semibold w-full' +
-    (propsHeadingClassName ? ` ${propsHeadingClassName}` : '');
+  const className = classNames('flex flex-col gap-4', propsClassName);
 
   return (
     <section className={className} {...props}>
-      <h2 className={headingClassName}>{title}</h2>
       {children}
     </section>
   );

@@ -8,6 +8,9 @@ import Table from './components/Table/Table';
 import TableHeaderCell from './components/Table/TableHeaderCell';
 import TableDataCell from './components/Table/TableDataCell';
 import Section from './components/Section';
+import SectionHeading from './components/SectionHeading';
+import TableBody from './components/Table/TableBody';
+import TableHead from './components/Table/TableHead';
 
 interface Props {
   enabled: boolean;
@@ -18,21 +21,35 @@ interface DefinedUser {
   firstName: string | null;
   lastName: string | null;
   emailAddress: string;
-  discipline: string | null;
-  role: string | null;
+  discipline: Discipline | null;
+  role: Role | null;
 }
 
-const placeholderDisciplines = ['Arch', 'Structure', 'Interior'];
+interface Discipline {
+  id: string;
+  name: string;
+}
+
+const placeholderDisciplines: Discipline[] = [
+  { id: '1', name: 'Arch' },
+  { id: '2', name: 'Structure' },
+  { id: '3', name: 'Interior' },
+];
+
+interface Role {
+  id: string;
+  name: string;
+}
 
 const placeholderRoles = [
-  'HOK',
-  'HOK Management',
-  'Consultant',
-  'Limited Consultant',
-  'Contractor',
-  'Sub-Contractor',
-  'Owner',
-  'Owner Contact Only',
+  { id: '1', name: 'HOK' },
+  { id: '2', name: 'HOK Management' },
+  { id: '3', name: 'Consultant' },
+  { id: '4', name: 'Limited Consultant' },
+  { id: '5', name: 'Contractor' },
+  { id: '6', name: 'Sub-Contractor' },
+  { id: '7', name: 'Owner' },
+  { id: '8', name: 'Owner Contact Only' },
 ];
 
 const DefineUsers: React.FC<Props> = ({ enabled, parsedUsers }) => {
@@ -78,109 +95,125 @@ const DefineUsers: React.FC<Props> = ({ enabled, parsedUsers }) => {
   }, []);
 
   const handleChangeDiscipline =
-    (idx: number) =>
-    (discipline: SingleValue<{ value: string; label: string }>) => {
+    (idx: number) => (discipline: SingleValue<Discipline>) => {
       setUsers((users) => {
         const updatedUsers = [...users];
 
         updatedUsers[idx] = {
           ...updatedUsers[idx],
-          discipline: discipline?.value ?? null,
+          discipline,
         };
 
         return updatedUsers;
       });
     };
 
-  const handleChangeRole =
-    (idx: number) => (role: SingleValue<{ value: string; label: string }>) => {
-      setUsers((users) => {
-        const updatedUsers = [...users];
+  const handleChangeRole = (idx: number) => (role: SingleValue<Role>) => {
+    setUsers((users) => {
+      const updatedUsers = [...users];
 
-        updatedUsers[idx] = {
-          ...updatedUsers[idx],
-          role: role?.value ?? null,
-        };
+      updatedUsers[idx] = {
+        ...updatedUsers[idx],
+        role,
+      };
 
-        return updatedUsers;
-      });
-    };
+      return updatedUsers;
+    });
+  };
+
+  const getRoleOptionValue = useCallback(
+    (role: SingleValue<Role>) => role?.id ?? '',
+    []
+  );
+
+  const getRoleOptionLabel = useCallback(
+    (role: SingleValue<Role>) => role?.name ?? '',
+    []
+  );
+
+  const getDisciplineOptionValue = useCallback(
+    (discipline: SingleValue<Discipline>) => discipline?.id ?? '',
+    []
+  );
+
+  const getDisciplineOptionLabel = useCallback(
+    (discipline: SingleValue<Discipline>) => discipline?.name ?? '',
+    []
+  );
 
   return (
-    <Section title="Define Users">
+    <Section>
+      <SectionHeading>Define Users</SectionHeading>
       <div className="overflow-x-auto">
         <Table className="min-w-full table-fixed">
-          <thead>
+          <TableHead>
             <TableRow isHeader={true}>
-              <TableHeaderCell className="min-w-[8rem]">First</TableHeaderCell>
-              <TableHeaderCell />
-              <TableHeaderCell className="min-w-[8rem]">Last</TableHeaderCell>
-              <TableHeaderCell className="min-w-[10rem] p-2">
-                Email
-              </TableHeaderCell>
-              <TableHeaderCell className="min-w-[10rem] p-2">
+              <TableHeaderCell className="min-w-fit">First</TableHeaderCell>
+              <TableHeaderCell className="w-[8rem]" />
+              <TableHeaderCell className="min-w-fit">Last</TableHeaderCell>
+              <TableHeaderCell className="min-w-fit">Email</TableHeaderCell>
+              <TableHeaderCell className="min-w-[10rem]">
                 Discipline
               </TableHeaderCell>
-              <TableHeaderCell className="min-w-[15rem] p-2">
-                Role
-              </TableHeaderCell>
+              <TableHeaderCell className="min-w-[15rem]">Role</TableHeaderCell>
             </TableRow>
-          </thead>
-          <tbody>
+          </TableHead>
+          <TableBody>
+            {!users.length && (
+              <TableRow>
+                <TableDataCell colSpan={6}>No users defined.</TableDataCell>
+              </TableRow>
+            )}
             {users.map((user, idx) => (
               <TableRow key={user.emailAddress}>
-                <TableDataCell className="break-all">
+                <TableDataCell data-label="First" className="break-all">
                   {user.firstName}
                 </TableDataCell>
-                <TableDataCell>
-                  <Button
-                    buttonType={ButtonType.Secondary}
-                    className="!p-1 text-sm font-extrabold"
-                    onClick={() => swapFirstAndLastName(idx)}
-                  >
-                    {'<>'}
-                  </Button>
+                <TableDataCell className="text-right">
+                  {user.firstName && user.lastName && (
+                    <Button
+                      buttonType={ButtonType.Secondary}
+                      className="!p-1 !px-2 text-sm font-extrabold"
+                      onClick={() => swapFirstAndLastName(idx)}
+                    >
+                      {'Swap First/Last'}
+                    </Button>
+                  )}
                 </TableDataCell>
-                <TableDataCell className="break-all">
+                <TableDataCell data-label="Last" className="break-all">
                   {user.lastName}
                 </TableDataCell>
-                <TableDataCell className="break-all">
+                <TableDataCell data-label="Email" className="break-all">
                   {user.emailAddress}
                 </TableDataCell>
-                <TableDataCell>
+                <TableDataCell data-label="Discipline">
                   <Select
+                    aria-label="Discipline"
                     menuPortalTarget={document.body}
-                    options={placeholderDisciplines.map((d) => ({
-                      value: d,
-                      label: d,
-                    }))}
+                    options={placeholderDisciplines}
                     onChange={handleChangeDiscipline(idx)}
-                    selectedValue={
-                      user.discipline
-                        ? { value: user.discipline, label: user.discipline }
-                        : null
-                    }
+                    selectedValue={user.discipline}
+                    getOptionValue={getDisciplineOptionValue}
+                    getOptionLabel={getDisciplineOptionLabel}
                   />
                 </TableDataCell>
-                <TableDataCell>
-                  <Select
+                <TableDataCell data-label="Role">
+                  <Select<Role>
+                    aria-label="Role"
                     menuPortalTarget={document.body}
-                    options={placeholderRoles.map((r) => ({
-                      value: r,
-                      label: r,
-                    }))}
+                    options={placeholderRoles}
                     onChange={handleChangeRole(idx)}
-                    selectedValue={
-                      user.role ? { value: user.role, label: user.role } : null
-                    }
+                    selectedValue={user.role}
+                    getOptionValue={getRoleOptionValue}
+                    getOptionLabel={getRoleOptionLabel}
                   />
                 </TableDataCell>
               </TableRow>
             ))}
-          </tbody>
+          </TableBody>
         </Table>
       </div>
-      <span className="mt-3 flex justify-between gap-4 md:justify-start">
+      <span className="flex justify-between gap-4 md:justify-start">
         <Button
           buttonType={ButtonType.Primary}
           type="submit"

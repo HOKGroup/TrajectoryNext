@@ -1,6 +1,3 @@
-import groupBy from 'lodash/groupBy';
-import pickBy from 'lodash/pickBy';
-
 export enum ParsedUserResultType {
   Error = 'error',
   Success = 'success',
@@ -42,12 +39,14 @@ const parseRegExp = RegExp(
   '$'
 );
 
-function parseUserEmail(input: string): ParsedUserResult {
+const emailOnlyRegExp = /<?(.+@[^>]+)>?/;
+
+export function parseUserEmail(input: string): ParsedUserResult {
   const matches = input.match(parseRegExp);
 
   if (!matches) {
     // try matching as email address with no name
-    const emailMatch = input.match(/<?(.+@[^>]+)>?/);
+    const emailMatch = input.match(emailOnlyRegExp);
 
     if (emailMatch) {
       return {
@@ -83,22 +82,32 @@ export interface ParseUserEmailsResult {
 }
 
 function validateUniqueEmails(parseResult: ParseUserEmailsResult) {
-  const grouped = groupBy(parseResult.values, (v) => v.emailAddress);
-  const duplicates = pickBy(grouped, (x) => x.length > 1);
+  const emailAddressesSet = new Set<string>();
+  const duplicateEmailAddressesSet = new Set<string>();
 
-  const duplicateEmailAddresses = Object.keys(duplicates);
+  parseResult.values.forEach((v) => {
+    if (emailAddressesSet.has(v.emailAddress)) {
+      duplicateEmailAddressesSet.add(v.emailAddress);
+    } else {
+      emailAddressesSet.add(v.emailAddress);
+    }
+  });
 
-  if (duplicateEmailAddresses.length === 0) {
+  const duplicateEmailAddressesArr = Array.from(duplicateEmailAddressesSet);
+
+  if (duplicateEmailAddressesArr.length === 0) {
     return parseResult;
   }
 
   return {
     ...parseResult,
     success: false,
-    values: parseResult.values.filter((v) => !duplicates[v.emailAddress]),
+    values: parseResult.values.filter(
+      (v) => !duplicateEmailAddressesSet.has(v.emailAddress)
+    ),
     errors: [
       ...parseResult.errors,
-      ...duplicateEmailAddresses.map((e) => `Duplicate email: ${e}`),
+      ...duplicateEmailAddressesArr.map((e) => `Duplicate email: ${e}`),
     ],
   };
 }

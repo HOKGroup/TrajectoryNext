@@ -1,0 +1,31 @@
+tbody > tr:last-child {
+  @apply border-b-0;
+}
+
+tbody > tr > td {
+  @apply border-l border-r border-b lg:border-b-0;
+}
+
+tbody > tr > td:first-child {
+  @apply border-l;
+}
+
+tbody > tr > td:last-child {
+  @apply border-r;
+}
+
+tbody > tr:first-child > td:first-child {
+  @apply border-t lg:border-t-0 rounded-tl-md rounded-tr-md lg:rounded-tl-none;
+}
+
+tbody > tr:last-child > td {
+  @apply lg:border-b;
+}
+
+tbody > tr:last-child > td:first-child {
+  @apply lg:rounded-bl-md;
+}
+
+tbody > tr:last-child > td:last-child {
+  @apply rounded-bl-md rounded-br-md lg:border-b;
+}

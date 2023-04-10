@@ -1,11 +1,15 @@
-import React, { type DetailedHTMLProps, type TableHTMLAttributes } from 'react';
+import React, { type HTMLProps } from 'react';
+import classNames from 'classnames';
 
-const Table: React.FC<
-  DetailedHTMLProps<TableHTMLAttributes<HTMLTableElement>, HTMLTableElement>
-> = ({ className: propsClassName, children, ...props }) => {
-  const className =
-    'text-left text-sm lg:text-base' +
-    (propsClassName ? ` ${propsClassName}` : '');
+const Table: React.FC<HTMLProps<HTMLTableElement>> = ({
+  className: propsClassName,
+  children,
+  ...props
+}) => {
+  const className = classNames(
+    'block border-separate border-spacing-0 text-left lg:table lg:rounded-none',
+    propsClassName
+  );
 
   return (
     <table className={className} {...props}>
