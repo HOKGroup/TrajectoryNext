@@ -125,7 +125,7 @@ const DarkModeToggle: FC = () => {
               type="button"
               className={classNames(
                 'block w-full px-4 py-2 text-left hover:bg-gray-200 dark:hover:bg-gray-600 dark:hover:text-slate-50',
-                { 'bg-blue-500 text-slate-50': isDarkMode && !isSystemTheme }
+                { '!bg-blue-500 !text-slate-50': isDarkMode && !isSystemTheme }
               )}
               onClick={setDarkMode}
             >
@@ -144,7 +144,7 @@ const DarkModeToggle: FC = () => {
               type="button"
               className={classNames(
                 'block w-full px-4 py-2 text-left hover:bg-gray-200 dark:hover:bg-gray-600 dark:hover:text-slate-50',
-                { 'bg-blue-500 text-slate-50': !isDarkMode && !isSystemTheme }
+                { '!bg-blue-500 !text-slate-50': !isDarkMode && !isSystemTheme }
               )}
               onClick={setLightMode}
             >
@@ -163,7 +163,7 @@ const DarkModeToggle: FC = () => {
               type="button"
               className={classNames(
                 'block w-full px-4 py-2 text-left hover:bg-gray-200 dark:hover:bg-gray-600 dark:hover:text-slate-50',
-                { 'bg-blue-500 text-slate-50': isSystemTheme }
+                { '!bg-blue-500 !text-slate-50': isSystemTheme }
               )}
               onClick={setSystem}
             >
