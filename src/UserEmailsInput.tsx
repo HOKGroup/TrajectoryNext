@@ -68,19 +68,37 @@ const UserEmailsInput: React.FC<Props> = ({ enabled, setParsedUsers }) => {
       <form className="flex flex-col gap-2">
         <label className="flex flex-col gap-4">
           <SectionHeading>Paste User Emails</SectionHeading>
-          <textarea
-            onChange={handleInput}
-            value={userEmails}
-            disabled={!enabled}
-            id="userEmails"
-            name="userEmails"
-            rows={numRows}
-            cols={numCols}
-            autoCorrect="off"
-            wrap="off"
-            spellCheck={false}
-            className="block w-full rounded-md border-2 px-2 py-1 outline-none focus:border-transparent focus:ring focus:ring-blue-300 enabled:bg-white disabled:cursor-not-allowed disabled:bg-slate-100 dark:text-slate-950 dark:disabled:bg-slate-200"
-          />
+          <div className="-mt-2 text-sm lg:hidden">
+            Paste from Outlook. Example:
+            <br />
+            {
+              'John Doe <jdoe@example.com>; Alice Jones <ajones@example.com>; Charlie Brown <cbrown@example.com>'
+            }
+          </div>
+          <div className="group relative">
+            <textarea
+              onChange={handleInput}
+              value={userEmails}
+              disabled={!enabled}
+              id="userEmails"
+              name="userEmails"
+              rows={numRows}
+              cols={numCols}
+              autoCorrect="off"
+              wrap="off"
+              spellCheck={false}
+              className="peer block w-full rounded-md border-2 px-2 py-1 outline-none focus:border-transparent focus:ring focus:ring-blue-300 enabled:bg-white disabled:cursor-not-allowed disabled:bg-slate-100 dark:text-slate-950 dark:disabled:bg-slate-200"
+            />
+            <div className="absolute left-1/4 top-full z-10 mt-2 hidden w-3/4 rounded-md bg-gray-700 p-4 text-slate-50 before:absolute before:bottom-full before:left-1/2 before:ml-[-8px] before:border-[8px] before:border-gray-700 before:border-x-transparent before:border-t-transparent before:content-['_'] after:absolute after:z-10 lg:group-hover:peer-enabled:block">
+              Paste from Outlook.
+              <br />
+              Example:
+              <br />
+              {
+                'John Doe <jdoe@example.com>; Alice Jones <ajones@example.com>; Charlie Brown <cbrown@example.com>'
+              }
+            </div>
+          </div>
         </label>
         <output
           htmlFor="userEmails"
