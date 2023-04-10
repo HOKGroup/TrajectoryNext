@@ -5,12 +5,7 @@ import {
   useState,
   useEffect,
 } from 'react';
-import {
-  type ParsedUser,
-  parseUserEmails,
-  parseUserEmail,
-  ParsedUserResultType,
-} from './parseUserEmails';
+import { type ParsedUser, parseUserEmails } from './parseUserEmails';
 import Button, { ButtonType } from './components/Button';
 import Section from './components/Section';
 import SectionHeading from './components/SectionHeading';
@@ -22,6 +17,7 @@ interface Props {
 
 const minTextAreaSize = 2;
 const maxTextAreaSize = 10;
+const numCols = 80;
 
 const calculateTextAreaSize = (inputStr: string) => {
   const numLines = inputStr.split('\n').length + 1;
@@ -37,23 +33,6 @@ const UserEmailsInput: React.FC<Props> = ({ enabled, setParsedUsers }) => {
 
   const handleInput = useCallback((evt: ChangeEvent<HTMLTextAreaElement>) => {
     setUserEmails(evt.target.value);
-  }, []);
-
-  const formatInput = useCallback(() => {
-    setUserEmails((userEmails) => {
-      const splitBySemicolon = userEmails.split(';');
-      let newValue = splitBySemicolon.map((s) => s.trim()).join('; \n');
-
-      if (
-        splitBySemicolon.length &&
-        parseUserEmail(splitBySemicolon[splitBySemicolon.length - 1]).type ===
-          ParsedUserResultType.Success
-      ) {
-        newValue += '; \n';
-      }
-
-      return newValue;
-    });
   }, []);
 
   useEffect(() => {
@@ -73,6 +52,7 @@ const UserEmailsInput: React.FC<Props> = ({ enabled, setParsedUsers }) => {
       } else {
         setErrors(undefined);
         setParsedUsers(parsed.values);
+        setUserEmails('');
       }
     },
     [userEmails, setParsedUsers]
@@ -89,15 +69,15 @@ const UserEmailsInput: React.FC<Props> = ({ enabled, setParsedUsers }) => {
         <label className="flex flex-col gap-4">
           <SectionHeading>Paste User Emails</SectionHeading>
           <textarea
-            onBlur={formatInput}
             onChange={handleInput}
             value={userEmails}
             disabled={!enabled}
             id="userEmails"
             name="userEmails"
             rows={numRows}
-            cols={80}
+            cols={numCols}
             autoCorrect="off"
+            wrap="off"
             spellCheck={false}
             className="block w-full rounded-md border-2 px-2 py-1 outline-none focus:border-transparent focus:ring focus:ring-blue-300 enabled:bg-white disabled:cursor-not-allowed disabled:bg-slate-100 dark:text-slate-950 dark:disabled:bg-slate-200"
           />

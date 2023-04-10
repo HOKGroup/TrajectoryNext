@@ -41,7 +41,7 @@ const parseRegExp = RegExp(
 
 const emailOnlyRegExp = /<?(.+@[^>]+)>?/;
 
-export function parseUserEmail(input: string): ParsedUserResult {
+function parseUserEmail(input: string): ParsedUserResult {
   const matches = input.match(parseRegExp);
 
   if (!matches) {
