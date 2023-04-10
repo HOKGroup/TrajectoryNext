@@ -99,10 +99,14 @@ const DarkModeToggle: FC = () => {
       >
         {isDarkMode ? (
           <IconMoon
+            alt="Dark Mode"
             className={classNames('h-4 w-4', { invert: !isDarkMode })}
           />
         ) : (
-          <IconSun className={classNames('h-4 w-4', { invert: !isDarkMode })} />
+          <IconSun
+            alt="Light Mode"
+            className={classNames('h-4 w-4', { invert: !isDarkMode })}
+          />
         )}{' '}
         <IconChevronDown
           className={classNames('h-4 w-4', { invert: !isDarkMode })}

@@ -5,15 +5,15 @@ import iconSystem from '../assets/icons/display-solid.svg';
 import iconChevronDown from '../assets/icons/chevron-down-solid.svg';
 
 export const IconSun = (props: HTMLProps<HTMLImageElement>) => (
-  <img src={iconSun} alt="Light Mode" {...props} />
+  <img src={iconSun} {...props} />
 );
 
 export const IconMoon = (props: HTMLProps<HTMLImageElement>) => (
-  <img src={iconMoon} alt="Dark Mode" {...props} />
+  <img src={iconMoon} {...props} />
 );
 
 export const IconSystem = (props: HTMLProps<HTMLImageElement>) => (
-  <img src={iconSystem} alt="System" {...props} />
+  <img src={iconSystem} {...props} />
 );
 
 export const IconChevronDown = (props: HTMLProps<HTMLImageElement>) => (
