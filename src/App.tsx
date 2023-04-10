@@ -6,15 +6,11 @@ import SelectProject from './SelectProject';
 import ExistingTeam from './ExistingTeam';
 import DarkModeToggle from './DarkModeToggle';
 import hokLogo from './assets/hokLogo.svg';
-
-interface Project {
-  id: string;
-  name: string;
-}
+import { ProjectDetailsComponent } from './api/types';
 
 function App() {
   const [selectedProject, setSelectedProject] = useState(
-    null as Project | null
+    null as ProjectDetailsComponent | null
   );
 
   const [parsedUsers, setParsedUsers] = useState([] as ParsedUser[]);
