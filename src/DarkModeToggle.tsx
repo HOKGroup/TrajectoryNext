@@ -102,7 +102,6 @@ const DarkModeToggle: FC = () => {
     delete localStorage.theme;
     const newIsDarkMode = getIsDarkMode();
     setIsDarkMode(newIsDarkMode);
-    updateDocumentDarkModeValue(newIsDarkMode);
     setIsSystemTheme(true);
     setDropdownIsOpen(false);
   }, []);
