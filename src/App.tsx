@@ -18,11 +18,10 @@ function App() {
   return (
     <>
       <div className="sticky top-0 z-10 border-b bg-slate-100 py-1 dark:bg-slate-800">
-        {/* <header className="flex flex-col items-start justify-between pl-4 sm:flex-row sm:items-center"> */}
-        <header className="flex flex-row items-center justify-between pl-4">
-          <span className="flex">
+        <header className="my-1 flex flex-row items-center justify-between pl-4">
+          <span className="flex items-center">
             <img src={hokLogo} className="mr-4 h-8 w-8" alt="HOK logo" />
-            <h1 className="mb-2 self-start whitespace-nowrap text-2xl font-semibold">
+            <h1 className="whitespace-nowrap text-2xl font-semibold">
               Trajectory Next
             </h1>
           </span>
