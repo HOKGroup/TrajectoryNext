@@ -1,33 +1,12 @@
-import {
-  useCallback,
-  useState,
-  useEffect,
-  useRef,
-  type FC,
-  type HTMLProps,
-} from 'react';
+import { useCallback, useState, useEffect, useRef, type FC } from 'react';
 import Button, { ButtonType } from './components/Button';
-import iconSun from './assets/icons/sun-regular.svg';
-import iconMoon from './assets/icons/moon-regular.svg';
-import iconSystem from './assets/icons/display-solid.svg';
-import iconChevronDown from './assets/icons/chevron-down-solid.svg';
+import {
+  IconSun,
+  IconMoon,
+  IconSystem,
+  IconChevronDown,
+} from './components/Icons';
 import classNames from 'classnames';
-
-const IconSun = (props: HTMLProps<HTMLImageElement>) => (
-  <img src={iconSun} alt="Light Mode" {...props} />
-);
-
-const IconMoon = (props: HTMLProps<HTMLImageElement>) => (
-  <img src={iconMoon} alt="Dark Mode" {...props} />
-);
-
-const IconSystem = (props: HTMLProps<HTMLImageElement>) => (
-  <img src={iconSystem} alt="System" {...props} />
-);
-
-const IconChevronDown = (props: HTMLProps<HTMLImageElement>) => (
-  <img src={iconChevronDown} {...props} />
-);
 
 const getIsDarkMode = () => {
   return (
@@ -102,7 +81,6 @@ const DarkModeToggle: FC = () => {
     delete localStorage.theme;
     const newIsDarkMode = getIsDarkMode();
     setIsDarkMode(newIsDarkMode);
-    updateDocumentDarkModeValue(newIsDarkMode);
     setIsSystemTheme(true);
     setDropdownIsOpen(false);
   }, []);
@@ -121,10 +99,14 @@ const DarkModeToggle: FC = () => {
       >
         {isDarkMode ? (
           <IconMoon
+            alt="Dark Mode"
             className={classNames('h-4 w-4', { invert: !isDarkMode })}
           />
         ) : (
-          <IconSun className={classNames('h-4 w-4', { invert: !isDarkMode })} />
+          <IconSun
+            alt="Light Mode"
+            className={classNames('h-4 w-4', { invert: !isDarkMode })}
+          />
         )}{' '}
         <IconChevronDown
           className={classNames('h-4 w-4', { invert: !isDarkMode })}
@@ -147,7 +129,7 @@ const DarkModeToggle: FC = () => {
               type="button"
               className={classNames(
                 'block w-full px-4 py-2 text-left hover:bg-gray-200 dark:hover:bg-gray-600 dark:hover:text-slate-50',
-                { 'bg-blue-500 text-slate-50': isDarkMode && !isSystemTheme }
+                { '!bg-blue-500 !text-slate-50': isDarkMode && !isSystemTheme }
               )}
               onClick={setDarkMode}
             >
@@ -166,7 +148,7 @@ const DarkModeToggle: FC = () => {
               type="button"
               className={classNames(
                 'block w-full px-4 py-2 text-left hover:bg-gray-200 dark:hover:bg-gray-600 dark:hover:text-slate-50',
-                { 'bg-blue-500 text-slate-50': !isDarkMode && !isSystemTheme }
+                { '!bg-blue-500 !text-slate-50': !isDarkMode && !isSystemTheme }
               )}
               onClick={setLightMode}
             >
@@ -185,7 +167,7 @@ const DarkModeToggle: FC = () => {
               type="button"
               className={classNames(
                 'block w-full px-4 py-2 text-left hover:bg-gray-200 dark:hover:bg-gray-600 dark:hover:text-slate-50',
-                { 'bg-blue-500 text-slate-50': isSystemTheme }
+                { '!bg-blue-500 !text-slate-50': isSystemTheme }
               )}
               onClick={setSystem}
             >
