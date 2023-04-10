@@ -11,6 +11,8 @@ import Section from './components/Section';
 import SectionHeading from './components/SectionHeading';
 import TableBody from './components/Table/TableBody';
 import TableHead from './components/Table/TableHead';
+import { DisciplineDetailsComponent, RoleDetailsComponent } from './api/types';
+import { disciplines, roles } from './api/mockData';
 
 interface Props {
   enabled: boolean;
@@ -21,36 +23,9 @@ interface DefinedUser {
   firstName: string | null;
   lastName: string | null;
   emailAddress: string;
-  discipline: Discipline | null;
-  role: Role | null;
+  discipline: DisciplineDetailsComponent | null;
+  role: RoleDetailsComponent | null;
 }
-
-interface Discipline {
-  id: string;
-  name: string;
-}
-
-const placeholderDisciplines: Discipline[] = [
-  { id: '1', name: 'Arch' },
-  { id: '2', name: 'Structure' },
-  { id: '3', name: 'Interior' },
-];
-
-interface Role {
-  id: string;
-  name: string;
-}
-
-const placeholderRoles = [
-  { id: '1', name: 'HOK' },
-  { id: '2', name: 'HOK Management' },
-  { id: '3', name: 'Consultant' },
-  { id: '4', name: 'Limited Consultant' },
-  { id: '5', name: 'Contractor' },
-  { id: '6', name: 'Sub-Contractor' },
-  { id: '7', name: 'Owner' },
-  { id: '8', name: 'Owner Contact Only' },
-];
 
 const DefineUsers: React.FC<Props> = ({ enabled, parsedUsers }) => {
   const [users, setUsers] = useState([] as DefinedUser[]);
@@ -95,7 +70,7 @@ const DefineUsers: React.FC<Props> = ({ enabled, parsedUsers }) => {
   }, []);
 
   const handleChangeDiscipline =
-    (idx: number) => (discipline: SingleValue<Discipline>) => {
+    (idx: number) => (discipline: SingleValue<DisciplineDetailsComponent>) => {
       setUsers((users) => {
         const updatedUsers = [...users];
 
@@ -108,36 +83,39 @@ const DefineUsers: React.FC<Props> = ({ enabled, parsedUsers }) => {
       });
     };
 
-  const handleChangeRole = (idx: number) => (role: SingleValue<Role>) => {
-    setUsers((users) => {
-      const updatedUsers = [...users];
+  const handleChangeRole =
+    (idx: number) => (role: SingleValue<RoleDetailsComponent>) => {
+      setUsers((users) => {
+        const updatedUsers = [...users];
 
-      updatedUsers[idx] = {
-        ...updatedUsers[idx],
-        role,
-      };
+        updatedUsers[idx] = {
+          ...updatedUsers[idx],
+          role,
+        };
 
-      return updatedUsers;
-    });
-  };
+        return updatedUsers;
+      });
+    };
 
   const getRoleOptionValue = useCallback(
-    (role: SingleValue<Role>) => role?.id ?? '',
+    (role: SingleValue<RoleDetailsComponent>) => role?.id ?? '',
     []
   );
 
   const getRoleOptionLabel = useCallback(
-    (role: SingleValue<Role>) => role?.name ?? '',
+    (role: SingleValue<RoleDetailsComponent>) => role?.payload.name ?? '',
     []
   );
 
   const getDisciplineOptionValue = useCallback(
-    (discipline: SingleValue<Discipline>) => discipline?.id ?? '',
+    (discipline: SingleValue<DisciplineDetailsComponent>) =>
+      discipline?.id ?? '',
     []
   );
 
   const getDisciplineOptionLabel = useCallback(
-    (discipline: SingleValue<Discipline>) => discipline?.name ?? '',
+    (discipline: SingleValue<DisciplineDetailsComponent>) =>
+      discipline?.payload.name ?? '',
     []
   );
 
@@ -190,7 +168,7 @@ const DefineUsers: React.FC<Props> = ({ enabled, parsedUsers }) => {
                   <Select
                     aria-label="Discipline"
                     menuPortalTarget={document.body}
-                    options={placeholderDisciplines}
+                    options={disciplines}
                     onChange={handleChangeDiscipline(idx)}
                     selectedValue={user.discipline}
                     getOptionValue={getDisciplineOptionValue}
@@ -198,10 +176,10 @@ const DefineUsers: React.FC<Props> = ({ enabled, parsedUsers }) => {
                   />
                 </TableDataCell>
                 <TableDataCell data-label="Role">
-                  <Select<Role>
+                  <Select
                     aria-label="Role"
                     menuPortalTarget={document.body}
-                    options={placeholderRoles}
+                    options={roles}
                     onChange={handleChangeRole(idx)}
                     selectedValue={user.role}
                     getOptionValue={getRoleOptionValue}
