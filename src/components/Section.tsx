@@ -6,11 +6,11 @@ const Section: FC<HTMLProps<HTMLElement>> = ({
   className: propsClassName,
   ...props
 }) => {
-  const className = classNames('flex flex-col gap-4', propsClassName);
+  const className = classNames('flex flex-col', propsClassName);
 
   return (
     <section className={className} {...props}>
-      {children}
+      <div className="gap-4">{children}</div>
     </section>
   );
 };

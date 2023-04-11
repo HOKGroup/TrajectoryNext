@@ -9,7 +9,7 @@ function Select<
     <ReactSelect
       unstyled={true}
       isClearable={true || props.isClearable}
-      {...props}
+      menuPortalTarget={document.body}
       classNames={{
         dropdownIndicator: (_state) => 'text-black/50 cursor-pointer',
         indicatorSeparator: (_state) => 'bg-black/20 mx-2',
@@ -26,7 +26,9 @@ function Select<
           'px-2 leading-9 dark:text-slate-950' +
           (state.isFocused ? ' bg-blue-200' : '') +
           (state.isSelected ? ' bg-blue-500 !text-white' : ''),
+        menuPortal: (_state) => '!z-20',
       }}
+      {...props}
     />
   );
 }
