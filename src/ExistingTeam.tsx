@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
   DisciplineDetailsComponent,
   ProjectDetailsComponent,
@@ -16,6 +16,7 @@ import TableRow from './components/Table/TableRow';
 import { roles } from './api/mockData';
 import { disciplines } from './api/mockData';
 import ExistingTeamUserRow from './ExistingTeamUserRow';
+import Button, { ButtonType } from './components/Button';
 
 interface Service {
   id: string;
@@ -57,6 +58,10 @@ const placeholderUsers = [
 
 const ExistingTeam: React.FC<Props> = ({ project, services }) => {
   const [existingUsers, setExistingUsers] = useState([] as ExistingUser[]);
+  const [stateExistingUsers, setStateExistingUsers] = useState(
+    [] as ExistingUser[]
+  );
+  const [isDirty, setIsDirty] = useState(false);
 
   useEffect(() => {
     if (project) {
@@ -65,6 +70,34 @@ const ExistingTeam: React.FC<Props> = ({ project, services }) => {
       setExistingUsers([]);
     }
   }, [project]);
+
+  useEffect(() => {
+    setStateExistingUsers(existingUsers);
+  }, [existingUsers]);
+
+  useEffect(() => {
+    let isDirty = false;
+
+    for (let i = 0; i < stateExistingUsers.length; i++) {
+      if (
+        stateExistingUsers[i].role.id !== existingUsers[i].role.id ||
+        stateExistingUsers[i].discipline.id !== existingUsers[i].discipline.id
+      ) {
+        isDirty = true;
+        setIsDirty(true);
+        i = stateExistingUsers.length;
+      }
+    }
+
+    if (!isDirty) {
+      setIsDirty(false);
+    }
+  }, [existingUsers, stateExistingUsers]);
+
+  const handleCancel = useCallback(() => {
+    setStateExistingUsers(existingUsers);
+    setIsDirty(false);
+  }, [existingUsers]);
 
   return (
     <Section>
@@ -86,16 +119,16 @@ const ExistingTeam: React.FC<Props> = ({ project, services }) => {
           <TableBody>
             {project && services && (
               <>
-                {existingUsers.map((user, idx) => (
+                {stateExistingUsers.map((user, idx) => (
                   <ExistingTeamUserRow
                     key={idx}
                     idx={idx}
                     user={user}
                     services={services}
-                    setUsers={setExistingUsers}
+                    setUsers={setStateExistingUsers}
                   />
                 ))}
-                {!existingUsers.length && (
+                {!stateExistingUsers.length && (
                   <TableRow>
                     <TableDataCell colSpan={5 + services.length}>
                       No existing team members.
@@ -107,6 +140,25 @@ const ExistingTeam: React.FC<Props> = ({ project, services }) => {
           </TableBody>
         </Table>
       </div>
+      <span className="flex justify-between gap-4 md:justify-start">
+        <Button
+          buttonType={ButtonType.Primary}
+          type="submit"
+          disabled={!project || !existingUsers.length || !isDirty} // TODO: check whether all fields are complete for each user
+          className="order-last grow md:order-1 md:grow-0"
+        >
+          Submit
+        </Button>
+        <Button
+          buttonType={ButtonType.Warning}
+          type="reset"
+          disabled={!project || !stateExistingUsers.length || !isDirty}
+          onClick={handleCancel}
+          className="order-first grow md:order-2 md:grow-0"
+        >
+          Cancel
+        </Button>
+      </span>
     </Section>
   );
 };
