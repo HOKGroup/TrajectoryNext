@@ -7,7 +7,6 @@ import {
   IconChevronDown,
 } from './components/Icons';
 import classNames from 'classnames';
-import { createPortal } from 'react-dom';
 
 const getIsDarkMode = () => {
   return (
@@ -90,14 +89,12 @@ const DarkModeToggle: FC = () => {
     setDropdownIsOpen((isOpen) => !isOpen);
   }, []);
 
-  const mainPortal = document.getElementById('main-portal');
-
   return (
     <>
       <Button
         ref={buttonRef}
         buttonType={ButtonType.Secondary}
-        className="mr-8 inline-flex w-14 items-center justify-around whitespace-nowrap rounded-lg !px-1 py-2 text-center text-sm text-slate-50 sm:mr-9"
+        className="mr-5 inline-flex w-14 items-center justify-around whitespace-nowrap rounded-lg !px-1 py-2 text-center text-sm text-slate-50 sm:mr-10"
         onClick={toggleDropdown}
       >
         {isDarkMode ? (
@@ -115,87 +112,77 @@ const DarkModeToggle: FC = () => {
           className={classNames('h-4 w-4', { invert: !isDarkMode })}
         />
       </Button>
-      {mainPortal &&
-        createPortal(
-          <div
-            id="dropdown"
-            ref={dropdownRef}
-            className={classNames(
-              'absolute right-0 z-20 mr-8 mt-4 w-28 divide-y divide-gray-100 rounded-lg border bg-slate-50 shadow-md dark:bg-slate-700',
-              { hidden: !dropdownIsOpen }
-            )}
-          >
-            <ul
-              className="py-2 text-sm text-gray-700 dark:text-gray-200"
-              aria-labelledby="dropdownDefaultButton"
-            >
-              <li>
-                <button
-                  type="button"
-                  className={classNames(
-                    'block w-full px-4 py-2 text-left hover:bg-gray-200 dark:hover:bg-gray-600 dark:hover:text-slate-50',
-                    {
-                      '!bg-blue-500 !text-slate-50':
-                        isDarkMode && !isSystemTheme,
-                    }
-                  )}
-                  onClick={setDarkMode}
-                >
-                  <span className="flex">
-                    <IconMoon
-                      className={classNames('mr-4 h-5 w-5', {
-                        invert: isDarkMode,
-                      })}
-                    />
-                    Dark
-                  </span>
-                </button>
-              </li>
-              <li>
-                <button
-                  type="button"
-                  className={classNames(
-                    'block w-full px-4 py-2 text-left hover:bg-gray-200 dark:hover:bg-gray-600 dark:hover:text-slate-50',
-                    {
-                      '!bg-blue-500 !text-slate-50':
-                        !isDarkMode && !isSystemTheme,
-                    }
-                  )}
-                  onClick={setLightMode}
-                >
-                  <span className="flex">
-                    <IconSun
-                      className={classNames('mr-4 h-5 w-5', {
-                        invert: isDarkMode,
-                      })}
-                    />
-                    Light
-                  </span>
-                </button>
-              </li>
-              <li>
-                <button
-                  type="button"
-                  className={classNames(
-                    'block w-full px-4 py-2 text-left hover:bg-gray-200 dark:hover:bg-gray-600 dark:hover:text-slate-50',
-                    { '!bg-blue-500 !text-slate-50': isSystemTheme }
-                  )}
-                  onClick={setSystem}
-                >
-                  <span className="flex">
-                    <IconSystem
-                      className={classNames('mr-4 h-5 w-5', {
-                        invert: isDarkMode || isSystemTheme,
-                      })}
-                    />
-                    System
-                  </span>
-                </button>
-              </li>
-            </ul>
-          </div>,
-          mainPortal
+      <div
+        id="dropdown"
+        ref={dropdownRef}
+        className={classNames(
+          'absolute right-0 z-10 mr-4 mt-4 w-28 divide-y divide-gray-100 rounded-lg border bg-slate-50 shadow-md dark:bg-slate-700',
+          { hidden: !dropdownIsOpen }
         )}
+      >
+        <ul
+          className="py-2 text-sm text-gray-700 dark:text-gray-200"
+          aria-labelledby="dropdownDefaultButton"
+        >
+          <li>
+            <button
+              type="button"
+              className={classNames(
+                'block w-full px-4 py-2 text-left hover:bg-gray-200 dark:hover:bg-gray-600 dark:hover:text-slate-50',
+                { '!bg-blue-500 !text-slate-50': isDarkMode && !isSystemTheme }
+              )}
+              onClick={setDarkMode}
+            >
+              <span className="flex">
+                <IconMoon
+                  className={classNames('mr-4 h-5 w-5', {
+                    invert: isDarkMode,
+                  })}
+                />
+                Dark
+              </span>
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              className={classNames(
+                'block w-full px-4 py-2 text-left hover:bg-gray-200 dark:hover:bg-gray-600 dark:hover:text-slate-50',
+                { '!bg-blue-500 !text-slate-50': !isDarkMode && !isSystemTheme }
+              )}
+              onClick={setLightMode}
+            >
+              <span className="flex">
+                <IconSun
+                  className={classNames('mr-4 h-5 w-5', {
+                    invert: isDarkMode,
+                  })}
+                />
+                Light
+              </span>
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              className={classNames(
+                'block w-full px-4 py-2 text-left hover:bg-gray-200 dark:hover:bg-gray-600 dark:hover:text-slate-50',
+                { '!bg-blue-500 !text-slate-50': isSystemTheme }
+              )}
+              onClick={setSystem}
+            >
+              <span className="flex">
+                <IconSystem
+                  className={classNames('mr-4 h-5 w-5', {
+                    invert: isDarkMode || isSystemTheme,
+                  })}
+                />
+                System
+              </span>
+            </button>
+          </li>
+        </ul>
+      </div>
     </>
   );
 };

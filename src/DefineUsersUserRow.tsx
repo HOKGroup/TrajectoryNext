@@ -188,6 +188,7 @@ const DefineUsersUserRow: FC<Props> = ({ user, setUsers, idx }) => {
       <TableDataCell data-label="Discipline">
         <Select
           aria-label="Discipline"
+          menuPortalTarget={document.body}
           options={disciplines}
           onChange={handleChangeDiscipline}
           value={user.discipline}
@@ -198,6 +199,7 @@ const DefineUsersUserRow: FC<Props> = ({ user, setUsers, idx }) => {
       <TableDataCell data-label="Role">
         <Select
           aria-label="Role"
+          menuPortalTarget={document.body}
           options={roles}
           onChange={handleChangeRole}
           value={user.role}
