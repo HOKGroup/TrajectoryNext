@@ -137,6 +137,13 @@ const ExistingTeam: React.FC<Props> = ({ project, services }) => {
                 )}
               </>
             )}
+            {!project && (
+              <TableRow>
+                <TableDataCell colSpan={5 + (services || []).length}>
+                  No project selected.
+                </TableDataCell>
+              </TableRow>
+            )}
           </TableBody>
         </Table>
       </div>
