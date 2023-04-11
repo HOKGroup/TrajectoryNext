@@ -3,6 +3,7 @@ import {
   ProjectDetailsComponent,
   RoleDetailsComponent,
   DisciplineDetailsComponent,
+  ServiceDetailsComponent,
 } from './types';
 
 export const projects: ProjectDetailsComponent[] = [
@@ -148,6 +149,25 @@ export const disciplines: DisciplineDetailsComponent[] = [
     type: ComponentType.DisciplineDetails,
     payload: {
       name: 'Interior',
+    },
+  },
+];
+
+export const services: ServiceDetailsComponent[] = [
+  {
+    id: 'ceadf107-bafe-4669-9b2f-3143a9b35486',
+    entityId: '69863406-5c6d-4190-9cd0-d829d996f925',
+    type: ComponentType.ServiceDetails,
+    payload: {
+      name: 'Trimble Connect',
+    },
+  },
+  {
+    id: '261e246c-59af-43d0-b0ab-c159bf66e9f2',
+    entityId: '85b63c1a-91ae-42a3-86df-2088458bcdf8',
+    type: ComponentType.ServiceDetails,
+    payload: {
+      name: 'Smartsheet',
     },
   },
 ];

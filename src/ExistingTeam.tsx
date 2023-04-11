@@ -1,3 +1,10 @@
+import { useEffect, useState } from 'react';
+import {
+  DisciplineDetailsComponent,
+  ProjectDetailsComponent,
+  RoleDetailsComponent,
+  ServiceDetailsComponent,
+} from './api/types';
 import Section from './components/Section';
 import SectionHeading from './components/SectionHeading';
 import Table from './components/Table/Table';
@@ -6,37 +13,59 @@ import TableDataCell from './components/Table/TableDataCell';
 import TableHead from './components/Table/TableHead';
 import TableHeaderCell from './components/Table/TableHeaderCell';
 import TableRow from './components/Table/TableRow';
+import { roles } from './api/mockData';
+import { disciplines } from './api/mockData';
+import ExistingTeamUserRow from './ExistingTeamUserRow';
 
 interface Service {
   id: string;
   name: string;
 }
 
-interface ExistingUser {
+export interface ExistingUser {
   firstName: string;
   lastName: string;
   emailAddress: string;
-  discipline: string;
-  role: string;
+  discipline: DisciplineDetailsComponent;
+  role: RoleDetailsComponent;
   services: Service[];
 }
 
 interface Props {
-  existingUsers: ExistingUser[];
+  project: ProjectDetailsComponent | null;
+  services: ServiceDetailsComponent[] | null;
 }
 
-const placeholderServices = [
+const placeholderUsers = [
   {
-    id: 1,
-    name: 'Trimble Connect',
+    firstName: 'Michael',
+    lastName: 'Davis',
+    emailAddress: 'mdavis@example.com',
+    discipline: disciplines[0], // Arch
+    role: roles[0], // HOK
+    services: [],
   },
   {
-    id: 2,
-    name: 'Smartsheet',
+    firstName: 'Emily',
+    lastName: 'Lee',
+    emailAddress: 'elee@example.com',
+    discipline: disciplines[1], // Structure,
+    role: roles[2], // Consultant
+    services: [],
   },
 ];
 
-const ExistingTeam: React.FC<Props> = ({ existingUsers }) => {
+const ExistingTeam: React.FC<Props> = ({ project, services }) => {
+  const [existingUsers, setExistingUsers] = useState([] as ExistingUser[]);
+
+  useEffect(() => {
+    if (project) {
+      setExistingUsers(placeholderUsers);
+    } else {
+      setExistingUsers([]);
+    }
+  }, [project]);
+
   return (
     <Section>
       <SectionHeading>Existing Team</SectionHeading>
@@ -49,42 +78,31 @@ const ExistingTeam: React.FC<Props> = ({ existingUsers }) => {
               <TableHeaderCell>Email</TableHeaderCell>
               <TableHeaderCell>Discipline</TableHeaderCell>
               <TableHeaderCell>Role</TableHeaderCell>
-              {placeholderServices.map((s) => (
-                <TableHeaderCell key={s.id}>{s.name}</TableHeaderCell>
+              {(services || []).map((s) => (
+                <TableHeaderCell key={s.id}>{s.payload.name}</TableHeaderCell>
               ))}
             </TableRow>
           </TableHead>
           <TableBody>
-            {existingUsers.map((user, _idx) => (
-              <TableRow key={user.emailAddress}>
-                <TableDataCell data-label="First">
-                  {user.firstName}
-                </TableDataCell>
-                <TableDataCell data-label="Last">{user.lastName}</TableDataCell>
-                <TableDataCell data-label="Email">
-                  {user.emailAddress}
-                </TableDataCell>
-                <TableDataCell data-label="Discipline">
-                  {user.discipline}
-                </TableDataCell>
-                <TableDataCell data-label="Role">{user.role}</TableDataCell>
-                {placeholderServices.map((s) => (
-                  <TableDataCell
-                    key={s.id}
-                    data-label={s.name}
-                    className="break-normal"
-                  >
-                    {/* TODO: Service status */}
-                  </TableDataCell>
+            {project && services && (
+              <>
+                {existingUsers.map((user, idx) => (
+                  <ExistingTeamUserRow
+                    key={idx}
+                    idx={idx}
+                    user={user}
+                    services={services}
+                    setUsers={setExistingUsers}
+                  />
                 ))}
-              </TableRow>
-            ))}
-            {!existingUsers.length && (
-              <TableRow>
-                <TableDataCell colSpan={5 + placeholderServices.length}>
-                  No existing team members.
-                </TableDataCell>
-              </TableRow>
+                {!existingUsers.length && (
+                  <TableRow>
+                    <TableDataCell colSpan={5 + services.length}>
+                      No existing team members.
+                    </TableDataCell>
+                  </TableRow>
+                )}
+              </>
             )}
           </TableBody>
         </Table>
