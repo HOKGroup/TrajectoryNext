@@ -56,12 +56,22 @@ const placeholderUsers = [
   },
 ];
 
+export interface UserChanges {
+  discipline?: DisciplineDetailsComponent;
+  role?: RoleDetailsComponent;
+}
+
+// map from array index to user changes
+export type UsersChanges = Record<number, UserChanges>;
+
 const ExistingTeam: React.FC<Props> = ({ project, services }) => {
   const [existingUsers, setExistingUsers] = useState([] as ExistingUser[]);
+
+  const [usersChanges, setUsersChanges] = useState({} as UsersChanges);
+
   const [stateExistingUsers, setStateExistingUsers] = useState(
     [] as ExistingUser[]
   );
-  const [isDirty, setIsDirty] = useState(false);
 
   useEffect(() => {
     if (project) {
@@ -75,29 +85,36 @@ const ExistingTeam: React.FC<Props> = ({ project, services }) => {
     setStateExistingUsers(existingUsers);
   }, [existingUsers]);
 
-  useEffect(() => {
-    let isDirty = false;
-
-    for (let i = 0; i < stateExistingUsers.length; i++) {
-      if (
-        stateExistingUsers[i].role.id !== existingUsers[i].role.id ||
-        stateExistingUsers[i].discipline.id !== existingUsers[i].discipline.id
-      ) {
-        isDirty = true;
-        setIsDirty(true);
-        i = stateExistingUsers.length;
-      }
-    }
-
-    if (!isDirty) {
-      setIsDirty(false);
-    }
-  }, [existingUsers, stateExistingUsers]);
-
   const handleCancel = useCallback(() => {
     setStateExistingUsers(existingUsers);
-    setIsDirty(false);
+    setUsersChanges({} as UsersChanges);
   }, [existingUsers]);
+
+  const setUserChanges = useCallback(
+    (idx: number, userChanges: UserChanges | undefined) => {
+      const existingUserChanges = usersChanges[idx];
+
+      setUsersChanges((existingUsersChanges) => {
+        if (userChanges) {
+          return {
+            ...existingUsersChanges,
+            [idx]: {
+              ...existingUserChanges,
+              ...userChanges,
+            },
+          };
+        } else {
+          const newUsersChanges = { ...existingUsersChanges };
+          delete newUsersChanges[idx];
+
+          return newUsersChanges;
+        }
+      });
+    },
+    [usersChanges]
+  );
+
+  const isDirty = Object.keys(usersChanges).length > 0;
 
   return (
     <Section>
@@ -125,7 +142,8 @@ const ExistingTeam: React.FC<Props> = ({ project, services }) => {
                     idx={idx}
                     user={user}
                     services={services}
-                    setUsers={setStateExistingUsers}
+                    userChanges={usersChanges[idx]}
+                    setUserChanges={setUserChanges}
                   />
                 ))}
                 {!stateExistingUsers.length && (
