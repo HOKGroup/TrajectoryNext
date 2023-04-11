@@ -1,16 +1,11 @@
-import {
-  type FC,
-  useCallback,
-  type Dispatch,
-  type SetStateAction,
-} from 'react';
+import { type FC, useCallback } from 'react';
 import { type SingleValue } from 'react-select';
 import {
   DisciplineDetailsComponent,
   RoleDetailsComponent,
   ServiceDetailsComponent,
 } from './api/types';
-import { type ExistingUser } from './ExistingTeam';
+import { type ExistingUser, type UserChanges } from './ExistingTeam';
 import TableRow from './components/Table/TableRow';
 import TableDataCell from './components/Table/TableDataCell';
 import Select from './components/Select';
@@ -18,43 +13,65 @@ import { disciplines, roles } from './api/mockData';
 
 interface Props {
   user: ExistingUser;
-  setUsers: Dispatch<SetStateAction<ExistingUser[]>>;
   idx: number;
   services: ServiceDetailsComponent[];
+  userChanges: UserChanges | undefined;
+  setUserChanges: (idx: number, userChanges: UserChanges | undefined) => void;
 }
-const ExistingTeamUserRow: FC<Props> = ({ user, setUsers, idx, services }) => {
+
+const ExistingTeamUserRow: FC<Props> = ({
+  user,
+  idx,
+  services,
+  userChanges,
+  setUserChanges,
+}) => {
   const handleChangeDiscipline = useCallback(
     (discipline: SingleValue<DisciplineDetailsComponent>) => {
-      discipline &&
-        setUsers((users) => {
-          const updatedUsers = [...users];
+      if (!discipline) return;
 
-          updatedUsers[idx] = {
-            ...updatedUsers[idx],
-            discipline,
-          };
+      const existingDiscipline = user.discipline;
 
-          return updatedUsers;
-        });
+      const newUserChanges: UserChanges = {
+        ...(userChanges || {}),
+        discipline,
+      };
+
+      if (existingDiscipline.id === discipline.id) {
+        delete newUserChanges.discipline;
+      }
+
+      if (!Object.keys(newUserChanges).length) {
+        setUserChanges(idx, undefined);
+      } else {
+        setUserChanges(idx, newUserChanges);
+      }
     },
-    [idx, setUsers]
+    [idx, user, userChanges, setUserChanges]
   );
 
   const handleChangeRole = useCallback(
     (role: SingleValue<RoleDetailsComponent>) => {
-      role &&
-        setUsers((users) => {
-          const updatedUsers = [...users];
+      if (!role) return;
 
-          updatedUsers[idx] = {
-            ...updatedUsers[idx],
-            role,
-          };
+      const existingRole = user.role;
 
-          return updatedUsers;
-        });
+      const newUserChanges: UserChanges = {
+        ...(userChanges || {}),
+        role,
+      };
+
+      if (existingRole.id === role.id) {
+        delete newUserChanges.role;
+      }
+
+      if (!Object.keys(newUserChanges).length) {
+        setUserChanges(idx, undefined);
+      } else {
+        setUserChanges(idx, newUserChanges);
+      }
     },
-    [idx, setUsers]
+    [idx, user, userChanges, setUserChanges]
   );
 
   const getRoleOptionValue = useCallback(
@@ -79,6 +96,9 @@ const ExistingTeamUserRow: FC<Props> = ({ user, setUsers, idx, services }) => {
     []
   );
 
+  const discipline = userChanges?.discipline ?? user.discipline;
+  const role = userChanges?.role ?? user.role;
+
   return (
     <TableRow key={user.emailAddress}>
       <TableDataCell data-label="First">{user.firstName}</TableDataCell>
@@ -91,8 +111,8 @@ const ExistingTeamUserRow: FC<Props> = ({ user, setUsers, idx, services }) => {
           menuPortalTarget={document.body}
           options={disciplines}
           onChange={handleChangeDiscipline}
-          selectedValue={user.discipline}
-          value={user.discipline}
+          selectedValue={discipline}
+          value={discipline}
           getOptionValue={getDisciplineOptionValue}
           getOptionLabel={getDisciplineOptionLabel}
         />
@@ -105,8 +125,8 @@ const ExistingTeamUserRow: FC<Props> = ({ user, setUsers, idx, services }) => {
           menuPortalTarget={document.body}
           options={roles}
           onChange={handleChangeRole}
-          selectedValue={user.role}
-          value={user.role}
+          selectedValue={role}
+          value={role}
           getOptionValue={getRoleOptionValue}
           getOptionLabel={getRoleOptionLabel}
         />
