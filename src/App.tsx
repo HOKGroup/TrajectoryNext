@@ -7,6 +7,7 @@ import ExistingTeam from './ExistingTeam';
 import DarkModeToggle from './DarkModeToggle';
 import hokLogo from './assets/hokLogo.svg';
 import { ProjectDetailsComponent } from './api/types';
+import { services } from './api/mockData';
 
 function App() {
   const [selectedProject, setSelectedProject] = useState(
@@ -25,7 +26,6 @@ function App() {
               Trajectory Next
             </h1>
           </span>
-          {/* <span className="mx-2 my-2 sm:mx-0 sm:my-0"> */}
           <span>
             <DarkModeToggle />
           </span>
@@ -41,7 +41,7 @@ function App() {
           setParsedUsers={setParsedUsers}
         />
         <DefineUsers enabled={!!selectedProject} parsedUsers={parsedUsers} />
-        <ExistingTeam existingUsers={[]} />
+        <ExistingTeam project={selectedProject} services={services} />
       </main>
     </>
   );

@@ -14,7 +14,7 @@ function Select<
   return (
     <ReactSelect
       unstyled={true}
-      isClearable={true}
+      isClearable={true || props.isClearable}
       {...props}
       classNames={{
         dropdownIndicator: (_state) => 'text-black/50 cursor-pointer',
