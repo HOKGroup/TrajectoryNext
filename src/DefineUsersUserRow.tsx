@@ -191,7 +191,6 @@ const DefineUsersUserRow: FC<Props> = ({ user, setUsers, idx }) => {
           menuPortalTarget={document.body}
           options={disciplines}
           onChange={handleChangeDiscipline}
-          selectedValue={user.discipline}
           value={user.discipline}
           getOptionValue={getDisciplineOptionValue}
           getOptionLabel={getDisciplineOptionLabel}
@@ -203,7 +202,6 @@ const DefineUsersUserRow: FC<Props> = ({ user, setUsers, idx }) => {
           menuPortalTarget={document.body}
           options={roles}
           onChange={handleChangeRole}
-          selectedValue={user.role}
           value={user.role}
           getOptionValue={getRoleOptionValue}
           getOptionLabel={getRoleOptionLabel}

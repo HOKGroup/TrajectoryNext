@@ -1,16 +1,10 @@
-import ReactSelect, {
-  type SingleValue,
-  type Props,
-  type GroupBase,
-} from 'react-select';
+import ReactSelect, { type Props, type GroupBase } from 'react-select';
 
 function Select<
   Option,
   IsMulti extends boolean = false,
   Group extends GroupBase<Option> = GroupBase<Option>
->(
-  props: Props<Option, IsMulti, Group> & { selectedValue: SingleValue<Option> }
-) {
+>(props: Props<Option, IsMulti, Group>) {
   return (
     <ReactSelect
       unstyled={true}
@@ -25,7 +19,7 @@ function Select<
           (state.isFocused
             ? ' ring ring-blue-300 outline-none border-transparent'
             : '') +
-          (props.selectedValue ? ' text-black' : ' text-black/50'),
+          (props.value ? ' text-black' : ' text-black/50'),
         menu: (_state) => 'mt-2 border-2 bg-white rounded-md drop-shadow-md',
         noOptionsMessage: (_state) => 'text-black/50',
         option: (state) =>
