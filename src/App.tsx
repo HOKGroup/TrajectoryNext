@@ -31,21 +31,18 @@ function App() {
           </span>
         </header>
       </div>
-      <div className="overflow-x-hidden overflow-y-scroll">
-        <div id="main-portal" />
-        <main className="container flex grow flex-col gap-6 pb-16 pt-4">
-          <SelectProject
-            setSelectedProject={setSelectedProject}
-            selectedProject={selectedProject}
-          />
-          <UserEmailsInput
-            enabled={!!selectedProject}
-            setParsedUsers={setParsedUsers}
-          />
-          <DefineUsers enabled={!!selectedProject} parsedUsers={parsedUsers} />
-          <ExistingTeam project={selectedProject} services={services} />
-        </main>
-      </div>
+      <main className="container flex grow flex-col gap-6 pb-16 pt-4">
+        <SelectProject
+          setSelectedProject={setSelectedProject}
+          selectedProject={selectedProject}
+        />
+        <UserEmailsInput
+          enabled={!!selectedProject}
+          setParsedUsers={setParsedUsers}
+        />
+        <DefineUsers enabled={!!selectedProject} parsedUsers={parsedUsers} />
+        <ExistingTeam project={selectedProject} services={services} />
+      </main>
     </>
   );
 }

@@ -108,6 +108,7 @@ const ExistingTeamUserRow: FC<Props> = ({
         <Select
           isClearable={false}
           aria-label="Discipline"
+          menuPortalTarget={document.body}
           options={disciplines}
           onChange={handleChangeDiscipline}
           value={discipline}
@@ -120,6 +121,7 @@ const ExistingTeamUserRow: FC<Props> = ({
         <Select
           isClearable={false}
           aria-label="Discipline"
+          menuPortalTarget={document.body}
           options={roles}
           onChange={handleChangeRole}
           value={role}
