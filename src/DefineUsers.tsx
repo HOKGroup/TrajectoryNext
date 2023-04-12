@@ -42,6 +42,24 @@ const DefineUsers: React.FC<Props> = ({ enabled, parsedUsers }) => {
     setUsers([]);
   }, []);
 
+  const setUser = useCallback((idx: number, user: DefinedUser) => {
+    setUsers((users) => {
+      const updatedUsers = [...users];
+      updatedUsers[idx] = user;
+
+      return updatedUsers;
+    });
+  }, []);
+
+  const removeUser = useCallback((idx: number) => {
+    setUsers((users) => {
+      const updatedUsers = [...users];
+      updatedUsers.splice(idx, 1);
+
+      return updatedUsers;
+    });
+  }, []);
+
   return (
     <Section>
       <SectionHeading>Define Users</SectionHeading>
@@ -49,6 +67,7 @@ const DefineUsers: React.FC<Props> = ({ enabled, parsedUsers }) => {
         <Table className="min-w-full table-fixed">
           <TableHead>
             <TableRow isHeader={true}>
+              <TableHeaderCell />
               <TableHeaderCell className="min-w-fit">First</TableHeaderCell>
               <TableHeaderCell className="w-[8rem]" />
               <TableHeaderCell className="min-w-fit">Last</TableHeaderCell>
@@ -69,7 +88,8 @@ const DefineUsers: React.FC<Props> = ({ enabled, parsedUsers }) => {
               <DefineUsersUserRow
                 key={idx}
                 user={user}
-                setUsers={setUsers}
+                setUser={setUser}
+                removeUser={removeUser}
                 idx={idx}
               />
             ))}

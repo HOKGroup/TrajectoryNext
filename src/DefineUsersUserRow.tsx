@@ -1,10 +1,4 @@
-import {
-  type FormEvent,
-  type SetStateAction,
-  type FC,
-  type Dispatch,
-  useCallback,
-} from 'react';
+import { type FormEvent, type FC, useCallback } from 'react';
 import { disciplines, roles } from './api/mockData';
 import Button, { ButtonType } from './components/Button';
 import Select from './components/Select';
@@ -16,114 +10,80 @@ import {
   type DisciplineDetailsComponent,
   type RoleDetailsComponent,
 } from './api/types';
+import { IconXMark } from './components/Icons';
 
 interface Props {
   user: DefinedUser;
-  setUsers: Dispatch<SetStateAction<DefinedUser[]>>;
+  setUser: (idx: number, user: DefinedUser) => void;
+  removeUser: (idx: number) => void;
   idx: number;
 }
 
-const DefineUsersUserRow: FC<Props> = ({ user, setUsers, idx }) => {
+const DefineUsersUserRow: FC<Props> = ({ user, setUser, removeUser, idx }) => {
   const swapFirstAndLastName = useCallback(
     () =>
-      setUsers((users) => {
-        const newUsers = [...users];
-
-        newUsers[idx] = {
-          ...newUsers[idx],
-          firstName: newUsers[idx].lastName,
-          lastName: newUsers[idx].firstName,
-        };
-
-        return newUsers;
+      setUser(idx, {
+        ...user,
+        firstName: user.lastName,
+        lastName: user.firstName,
       }),
-    [setUsers, idx]
+    [setUser, idx, user]
   );
 
   const handleChangeFirstName = useCallback(
     (event: FormEvent<HTMLInputElement>) => {
       const firstName = event?.currentTarget.value;
 
-      setUsers((users) => {
-        const updatedUsers = [...users];
-
-        updatedUsers[idx] = {
-          ...updatedUsers[idx],
-          firstName,
-        };
-
-        return updatedUsers;
+      setUser(idx, {
+        ...user,
+        firstName,
       });
     },
-    [idx, setUsers]
+    [idx, setUser, user]
   );
 
   const handleChangeLastName = useCallback(
     (event: FormEvent<HTMLInputElement>) => {
       const lastName = event.currentTarget.value;
 
-      setUsers((users) => {
-        const updatedUsers = [...users];
-
-        updatedUsers[idx] = {
-          ...updatedUsers[idx],
-          lastName,
-        };
-
-        return updatedUsers;
+      setUser(idx, {
+        ...user,
+        lastName,
       });
     },
-    [idx, setUsers]
+    [idx, setUser, user]
   );
 
   const handleChangeEmailAddress = useCallback(
     (event: FormEvent<HTMLInputElement>) => {
       const emailAddress = event.currentTarget.value;
 
-      setUsers((users) => {
-        const updatedUsers = [...users];
-
-        updatedUsers[idx] = {
-          ...updatedUsers[idx],
-          emailAddress,
-        };
-
-        return updatedUsers;
+      setUser(idx, {
+        ...user,
+        emailAddress,
       });
     },
-    [idx, setUsers]
+    [idx, setUser, user]
   );
 
   const handleChangeDiscipline = useCallback(
     (discipline: SingleValue<DisciplineDetailsComponent>) => {
-      setUsers((users) => {
-        const updatedUsers = [...users];
-
-        updatedUsers[idx] = {
-          ...updatedUsers[idx],
-          discipline,
-        };
-
-        return updatedUsers;
+      setUser(idx, {
+        ...user,
+        discipline,
       });
     },
-    [idx, setUsers]
+    [idx, setUser, user]
   );
 
   const handleChangeRole = useCallback(
     (role: SingleValue<RoleDetailsComponent>) => {
-      setUsers((users) => {
-        const updatedUsers = [...users];
-
-        updatedUsers[idx] = {
-          ...updatedUsers[idx],
-          role,
-        };
-
-        return updatedUsers;
+      setUser(idx, {
+        ...user,
+        role,
       });
     },
-    [idx, setUsers]
+    [idx, setUser, user]
   );
 
   const getRoleOptionValue = useCallback(
@@ -148,8 +108,24 @@ const DefineUsersUserRow: FC<Props> = ({ user, setUsers, idx }) => {
     []
   );
 
+  const handleRemoveUser = useCallback(() => {
+    removeUser(idx);
+  }, [idx, removeUser]);
+
   return (
     <TableRow>
+      <TableDataCell className="text-right">
+        <Button
+          buttonType={ButtonType.Warning}
+          onClick={handleRemoveUser}
+          className="px-2 py-1 text-sm font-extrabold lg:px-3 lg:py-0"
+        >
+          <span className="flex flex-row items-center gap-1">
+            <div className="lg:hidden">Remove</div>
+            <IconXMark className="h-4 w-4 lg:h-6 lg:w-6" />
+          </span>
+        </Button>
+      </TableDataCell>
       <TableDataCell data-label="First" className="break-all">
         <input
           className="w-full rounded-md border-2 px-2 py-1 text-slate-950 outline-none focus:border-transparent focus:ring focus:ring-blue-300"
