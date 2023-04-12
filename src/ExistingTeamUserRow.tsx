@@ -135,8 +135,8 @@ const ExistingTeamUserRow: FC<Props> = ({
           data-label={s.payload.name}
           className="break-normal"
         >
-          {/* TODO: Service status */}
-          {'\u00A0'}
+          {/* TODO: value, onChange */}
+          <input type="checkbox" />
         </TableDataCell>
       ))}
     </TableRow>
