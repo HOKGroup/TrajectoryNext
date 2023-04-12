@@ -38,6 +38,9 @@ export interface UserChanges {
   role?: RoleDetailsComponent;
   firstName?: string;
   lastName?: string;
+
+  // set of service entity ids that have been toggled
+  services?: Set<string>;
 }
 
 // map from array index to user changes

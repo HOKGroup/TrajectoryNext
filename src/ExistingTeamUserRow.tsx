@@ -11,6 +11,7 @@ import TableDataCell from './components/Table/TableDataCell';
 import Select from './components/Select';
 import { disciplines, roles } from './api/mockData';
 import Input from './components/Input';
+import ExistingTeamUserRowService from './ExistingTeamUserRowService';
 
 interface Props {
   person: Person;
@@ -27,6 +28,40 @@ const ExistingTeamUserRow: FC<Props> = ({
   userChanges,
   setUserChanges,
 }) => {
+  const handleChangeServices = useCallback(
+    (serviceEntityId: string) => {
+      let services: Set<string>;
+
+      if (userChanges?.services) {
+        services = new Set(userChanges.services);
+      } else {
+        services = new Set();
+      }
+
+      if (services.has(serviceEntityId)) {
+        services.delete(serviceEntityId);
+      } else {
+        services.add(serviceEntityId);
+      }
+
+      const newUserChanges: UserChanges = {
+        ...(userChanges ?? {}),
+        services,
+      };
+
+      if (newUserChanges.services && !newUserChanges.services.size) {
+        delete newUserChanges.services;
+      }
+
+      if (!Object.keys(newUserChanges).length) {
+        setUserChanges(idx, undefined);
+      } else {
+        setUserChanges(idx, newUserChanges);
+      }
+    },
+    [idx, userChanges, setUserChanges]
+  );
+
   const handleChangeFirstName = useCallback(
     (event: FormEvent<HTMLInputElement>) => {
       const firstName = event.currentTarget.value;
@@ -195,16 +230,12 @@ const ExistingTeamUserRow: FC<Props> = ({
         />
       </TableDataCell>
       {services.map((s) => (
-        <TableDataCell
-          key={s.id}
-          data-label={s.payload.name}
-          className="break-normal"
-        >
-          {/* TODO: onChange */}
-          <input
-            type="checkbox"
-            checked={person.services.has(s.entityId)}
-            readOnly={true}
+        <TableDataCell key={s.id} data-label={s.payload.name}>
+          <ExistingTeamUserRowService
+            serviceEntityId={s.entityId}
+            userChanges={userChanges}
+            person={person}
+            onChangeService={handleChangeServices}
           />
         </TableDataCell>
       ))}
