@@ -11,6 +11,7 @@ import TableDataCell from './components/Table/TableDataCell';
 import Select from './components/Select';
 import { disciplines, roles } from './api/mockData';
 import Input from './components/Input';
+import ExistingTeamUserRowService from './ExistingTeamUserRowService';
 
 interface Props {
   person: Person;
@@ -229,21 +230,12 @@ const ExistingTeamUserRow: FC<Props> = ({
         />
       </TableDataCell>
       {services.map((s) => (
-        <TableDataCell
-          key={s.id}
-          data-label={s.payload.name}
-          className="break-normal"
-        >
-          {/* TODO: extract to component and useCallback for onChange */}
-          <input
-            type="checkbox"
-            className="h-4 w-4"
-            checked={
-              person.services.has(s.entityId)
-                ? Boolean(!userChanges?.services?.has(s.entityId))
-                : Boolean(userChanges?.services?.has(s.entityId))
-            }
-            onChange={() => handleChangeServices(s.entityId)}
+        <TableDataCell key={s.id} data-label={s.payload.name}>
+          <ExistingTeamUserRowService
+            serviceEntityId={s.entityId}
+            userChanges={userChanges}
+            person={person}
+            onChangeService={handleChangeServices}
           />
         </TableDataCell>
       ))}
