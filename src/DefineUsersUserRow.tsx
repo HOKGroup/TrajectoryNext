@@ -11,6 +11,7 @@ import {
   type RoleDetailsComponent,
 } from './api/types';
 import { IconXMark } from './components/Icons';
+import Input from './components/Input';
 
 interface Props {
   user: DefinedUser;
@@ -127,8 +128,7 @@ const DefineUsersUserRow: FC<Props> = ({ user, setUser, removeUser, idx }) => {
         </Button>
       </TableDataCell>
       <TableDataCell data-label="First" className="break-all">
-        <input
-          className="w-full rounded-md border-2 px-2 py-1 text-slate-950 outline-none focus:border-transparent focus:ring focus:ring-blue-300"
+        <Input
           placeholder="First name"
           value={user.firstName ?? undefined}
           onInput={handleChangeFirstName}
@@ -146,16 +146,14 @@ const DefineUsersUserRow: FC<Props> = ({ user, setUser, removeUser, idx }) => {
         )}
       </TableDataCell>
       <TableDataCell data-label="Last" className="break-all">
-        <input
-          className="w-full rounded-md border-2 px-2 py-1 text-slate-950 outline-none focus:border-transparent focus:ring focus:ring-blue-300"
+        <Input
           placeholder="Last name"
           value={user.lastName ?? ''}
           onInput={handleChangeLastName}
         />
       </TableDataCell>
       <TableDataCell data-label="Email" className="break-all">
-        <input
-          className="w-full rounded-md border-2 px-2 py-1 text-slate-950 outline-none focus:border-transparent focus:ring focus:ring-blue-300"
+        <Input
           placeholder="Email address"
           value={user.emailAddress}
           onInput={handleChangeEmailAddress}

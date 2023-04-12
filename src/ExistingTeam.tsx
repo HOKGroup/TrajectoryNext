@@ -36,6 +36,8 @@ interface Props {
 export interface UserChanges {
   discipline?: DisciplineDetailsComponent;
   role?: RoleDetailsComponent;
+  firstName?: string;
+  lastName?: string;
 }
 
 // map from array index to user changes

@@ -1,4 +1,4 @@
-import { type FC, useCallback } from 'react';
+import { type FC, useCallback, type FormEvent } from 'react';
 import { type SingleValue } from 'react-select';
 import {
   DisciplineDetailsComponent,
@@ -10,6 +10,7 @@ import TableRow from './components/Table/TableRow';
 import TableDataCell from './components/Table/TableDataCell';
 import Select from './components/Select';
 import { disciplines, roles } from './api/mockData';
+import Input from './components/Input';
 
 interface Props {
   person: Person;
@@ -26,6 +27,52 @@ const ExistingTeamUserRow: FC<Props> = ({
   userChanges,
   setUserChanges,
 }) => {
+  const handleChangeFirstName = useCallback(
+    (event: FormEvent<HTMLInputElement>) => {
+      const firstName = event.currentTarget.value;
+      const existingFirstName = person.personDetails.payload.firstName;
+
+      const newUserChanges: UserChanges = {
+        ...(userChanges ?? {}),
+        firstName,
+      };
+
+      if (existingFirstName === firstName) {
+        delete newUserChanges.firstName;
+      }
+
+      if (!Object.keys(newUserChanges).length) {
+        setUserChanges(idx, undefined);
+      } else {
+        setUserChanges(idx, newUserChanges);
+      }
+    },
+    [idx, person, userChanges, setUserChanges]
+  );
+
+  const handleChangeLastName = useCallback(
+    (event: FormEvent<HTMLInputElement>) => {
+      const lastName = event.currentTarget.value;
+      const existingLastName = person.personDetails.payload.lastName;
+
+      const newUserChanges: UserChanges = {
+        ...(userChanges ?? {}),
+        lastName,
+      };
+
+      if (existingLastName === lastName) {
+        delete newUserChanges.lastName;
+      }
+
+      if (!Object.keys(newUserChanges).length) {
+        setUserChanges(idx, undefined);
+      } else {
+        setUserChanges(idx, newUserChanges);
+      }
+    },
+    [idx, person, userChanges, setUserChanges]
+  );
+
   const handleChangeDiscipline = useCallback(
     (discipline: SingleValue<DisciplineDetailsComponent>) => {
       if (!discipline) return;
@@ -98,14 +145,26 @@ const ExistingTeamUserRow: FC<Props> = ({
 
   const discipline = userChanges?.discipline ?? person.disciplineDetails;
   const role = userChanges?.role ?? person.roleDetails;
+  const firstName =
+    userChanges?.firstName ?? person.personDetails.payload.firstName;
+  const lastName =
+    userChanges?.lastName ?? person.personDetails.payload.lastName;
 
   return (
     <TableRow key={person.personDetails.payload.emailAddress}>
       <TableDataCell data-label="First">
-        {person.personDetails.payload.firstName}
+        <Input
+          placeholder="First name"
+          value={firstName}
+          onInput={handleChangeFirstName}
+        />
       </TableDataCell>
       <TableDataCell data-label="Last">
-        {person.personDetails.payload.lastName}
+        <Input
+          placeholder="Last name"
+          value={lastName}
+          onInput={handleChangeLastName}
+        />
       </TableDataCell>
       <TableDataCell data-label="Email">
         {person.personDetails.payload.emailAddress}
