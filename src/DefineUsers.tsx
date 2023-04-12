@@ -15,6 +15,7 @@ import DefineUsersUserRow from './DefineUsersUserRow';
 interface Props {
   enabled: boolean;
   parsedUsers: Array<ParsedUser>;
+  clearParsedUsers: () => void;
 }
 
 export interface DefinedUser {
@@ -25,7 +26,11 @@ export interface DefinedUser {
   role: RoleDetailsComponent | null;
 }
 
-const DefineUsers: React.FC<Props> = ({ enabled, parsedUsers }) => {
+const DefineUsers: React.FC<Props> = ({
+  enabled,
+  parsedUsers,
+  clearParsedUsers,
+}) => {
   const [users, setUsers] = useState([] as DefinedUser[]);
 
   useEffect(() => {
@@ -40,7 +45,8 @@ const DefineUsers: React.FC<Props> = ({ enabled, parsedUsers }) => {
 
   const handleCancel = useCallback(() => {
     setUsers([]);
-  }, []);
+    clearParsedUsers();
+  }, [clearParsedUsers]);
 
   const setUser = useCallback((idx: number, user: DefinedUser) => {
     setUsers((users) => {
