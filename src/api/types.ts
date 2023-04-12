@@ -3,19 +3,23 @@ export enum ComponentType {
   PersonDetails = 'person.details',
   CompanyDetails = 'company.details',
   ServiceDetails = 'service.details',
-  ProjectGroup = 'project.group',
   RoleDetails = 'role.details',
   DisciplineDetails = 'discipline.details',
+  ServiceGroup = 'service.group',
+  MemberOf = 'memberOf',
 }
 
-// all component types except ProjectDetails
 export type ContainerComponent =
+  | ProjectDetailsComponent
   | PersonDetailsComponent
   | CompanyDetailsComponent
   | ServiceDetailsComponent
-  | ProjectGroupComponent
+  | ServiceGroupComponent
   | RoleDetailsComponent
-  | DisciplineDetailsComponent;
+  | DisciplineDetailsComponent
+  | MemberOfComponent;
+
+export type Container = ContainerComponent[];
 
 export interface IComponent<T extends ComponentType, P> {
   id: string;
@@ -65,12 +69,12 @@ export interface ServiceDetailsPayload {
   name: string;
 }
 
-export type ProjectGroupComponent = IComponent<
-  ComponentType.ProjectGroup,
-  ProjectGroupPayload
+export type ServiceGroupComponent = IComponent<
+  ComponentType.ServiceGroup,
+  ServiceGroupPayload
 >;
 
-export interface ProjectGroupPayload {
+export interface ServiceGroupPayload {
   name: string;
 }
 
@@ -90,4 +94,18 @@ export type DisciplineDetailsComponent = IComponent<
 
 export interface DisciplineDetailsPayload {
   name: string;
+}
+
+export type MemberOfComponent = IComponent<
+  ComponentType.MemberOf,
+  MemberOfPayload
+>;
+
+export interface MemberOfPayload {
+  fromComponentId: string;
+  fromEntityId: string;
+  fromComponentType: ComponentType | string;
+  toComponentId: string;
+  toEntityId: string;
+  toComponentType: ComponentType | string;
 }

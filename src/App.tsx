@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useEffect, useCallback, useState } from 'react';
 import UserEmailsInput from './UserEmailsInput';
 import { ParsedUser } from './parseUserEmails';
 import DefineUsers from './DefineUsers';
@@ -7,9 +7,12 @@ import ExistingTeam from './ExistingTeam';
 import DarkModeToggle from './DarkModeToggle';
 import hokLogo from './assets/hokLogo.svg';
 import { ProjectDetailsComponent } from './api/types';
-import { services } from './api/mockData';
+import { getProjectContainer } from './api';
+import { type DB, insertAllFromContainer, open } from './db';
 
 function App() {
+  const [db, setDb] = useState(undefined as DB | undefined);
+
   const [selectedProject, setSelectedProject] = useState(
     null as ProjectDetailsComponent | null
   );
@@ -23,6 +26,45 @@ function App() {
   const clearParsedUsers = useCallback(() => {
     setParsedUsers([]);
   }, []);
+
+  const [containerIsAddedToDb, setContainerIsAddedToDb] = useState(false);
+
+  useEffect(() => {
+    let ignore = false;
+
+    let closeDb = (): undefined | void => undefined;
+
+    if (selectedProject) {
+      const projectEntityId = selectedProject.entityId;
+
+      open(projectEntityId)
+        .then((openedDb) => {
+          setDb(openedDb);
+          closeDb = () => openedDb.close();
+
+          const container = getProjectContainer(projectEntityId);
+
+          return insertAllFromContainer(openedDb, container);
+        })
+        .then(() => {
+          if (!ignore) {
+            setContainerIsAddedToDb(true);
+          }
+        });
+
+      return () => {
+        ignore = true;
+        closeDb();
+      };
+    } else {
+      setDb((db) => {
+        db && db.close;
+        return undefined;
+      });
+
+      setContainerIsAddedToDb(false);
+    }
+  }, [selectedProject]);
 
   return (
     <>
@@ -52,7 +94,11 @@ function App() {
             parsedUsers={parsedUsers}
             clearParsedUsers={clearParsedUsers}
           />
-          <ExistingTeam project={selectedProject} services={services} />
+          <ExistingTeam
+            project={selectedProject}
+            containerIsAddedToDb={containerIsAddedToDb}
+            db={db}
+          />
         </div>
       </main>
     </>
