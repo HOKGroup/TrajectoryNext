@@ -41,6 +41,7 @@ Run tests with browser-based interactive UI.
 - `public/`: Assets that will be served at root path `/`. Cannot be imported from JavaScript. See [The `public` Directory](https://vitejs.dev/guide/assets.html#the-public-directory) for more info.
 - `src/assets`: Assets to be imported from JavaScript. Importing these assets will return the resolved public URL when served. See [Importing Asset as URL](https://vitejs.dev/guide/assets.html#importing-asset-as-url) for more info.
 - `src/api`: Type definitions and functions for retrieving ECS data from the API.
+- `src/db`: IndexedDB schema definition and database access functions.
 - `src/components`: shared UI components such as buttons, icons, etc.
 - `src/main.tsx`: Main React entry point.
 - `src/`: Top-level components.
@@ -84,3 +85,7 @@ Autocomplete, syntax highlighting, and linting for Tailwind CSS classes.
 
 - [React](https://react.dev/reference/react)
 - [React Select](https://react-select.com/home)
+
+## Database
+
+- [idb](https://github.com/jakearchibald/idb)
