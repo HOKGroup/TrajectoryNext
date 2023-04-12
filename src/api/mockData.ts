@@ -4,6 +4,9 @@ import {
   RoleDetailsComponent,
   DisciplineDetailsComponent,
   ServiceDetailsComponent,
+  PersonDetailsComponent,
+  ServiceGroupComponent,
+  MemberOfComponent,
 } from './types';
 
 export const projects: ProjectDetailsComponent[] = [
@@ -153,7 +156,7 @@ export const disciplines: DisciplineDetailsComponent[] = [
   },
 ];
 
-export const services: ServiceDetailsComponent[] = [
+export const serviceDetails: ServiceDetailsComponent[] = [
   {
     id: 'ceadf107-bafe-4669-9b2f-3143a9b35486',
     entityId: '69863406-5c6d-4190-9cd0-d829d996f925',
@@ -170,4 +173,161 @@ export const services: ServiceDetailsComponent[] = [
       name: 'Smartsheet',
     },
   },
+];
+
+export const serviceGroups: ServiceGroupComponent[] = [
+  {
+    id: 'a99402d8-06fc-48d2-bd2f-caaed07249f0',
+    entityId: serviceDetails[0].entityId, // Trimble Connect
+    type: ComponentType.ServiceGroup,
+    payload: {
+      name: 'Trimble Connect Group One',
+    },
+  },
+  {
+    id: '850391e4-7b1a-48a5-aa68-873ecf9cf58b',
+    entityId: serviceDetails[0].entityId, // Trimble Connect
+    type: ComponentType.ServiceGroup,
+    payload: {
+      name: 'Trimble Connect Group Two',
+    },
+  },
+  {
+    id: 'a39128fe-7506-43bd-b184-ed07f1f42c91',
+    entityId: serviceDetails[1].entityId, // Smartsheet
+    type: ComponentType.ServiceGroup,
+    payload: {
+      name: 'Smartsheet Group One',
+    },
+  },
+  {
+    id: 'c9bc3960-4a60-46f0-a1bb-66e6f1b4de86',
+    entityId: serviceDetails[1].entityId, // Smartsheet
+    type: ComponentType.ServiceGroup,
+    payload: {
+      name: 'Smartsheet Group Two',
+    },
+  },
+];
+
+export const people: PersonDetailsComponent[] = [
+  {
+    id: 'c39b815d-ac01-4371-bc5a-7c1de9aadf4f',
+    entityId: '7dbbe37d-e7fe-46ef-9e78-da68f199194b',
+    type: ComponentType.PersonDetails,
+    payload: {
+      firstName: 'Michael',
+      lastName: 'Davis',
+      emailAddress: 'mdavis@example.com',
+    },
+  },
+  {
+    id: '5cff46b3-8340-4092-aee8-0042e8599e48',
+    entityId: '1a5aa83f-e685-4a2f-ac08-0346c376e2a4',
+    type: ComponentType.PersonDetails,
+    payload: {
+      firstName: 'Emily',
+      lastName: 'Lee',
+      emailAddress: 'elee@example.com',
+    },
+  },
+];
+
+export const serviceMemberships: MemberOfComponent[] = [
+  {
+    id: '4ac11044-eb46-4a82-b0f6-b552f44b9307',
+    entityId: 'fab75a33-7a5f-4855-87f1-8d52950c4216',
+    type: ComponentType.MemberOf,
+    payload: {
+      fromComponentId: people[0].id,
+      fromEntityId: people[0].entityId,
+      fromComponentType: ComponentType.PersonDetails,
+      toComponentId: serviceGroups[0].id,
+      toEntityId: serviceGroups[0].entityId,
+      toComponentType: ComponentType.ServiceGroup,
+    },
+  },
+  {
+    id: 'e28e6b3d-9556-45d6-a8a0-0e1ce376b714',
+    entityId: '54520a8a-a8ee-4f0c-8505-cda4a30aae99',
+    type: ComponentType.MemberOf,
+    payload: {
+      fromComponentId: people[1].id,
+      fromEntityId: people[1].entityId,
+      fromComponentType: ComponentType.PersonDetails,
+      toComponentId: serviceGroups[2].id,
+      toEntityId: serviceGroups[2].entityId,
+      toComponentType: ComponentType.ServiceGroup,
+    },
+  },
+];
+
+export const roleMemberships: MemberOfComponent[] = [
+  {
+    id: '642c28c1-0032-4bee-b88f-2966b54a529c',
+    entityId: 'a0ac9d4c-1b38-4bee-bcc7-2154476f4a22',
+    type: ComponentType.MemberOf,
+    payload: {
+      fromComponentId: people[0].id,
+      fromEntityId: people[0].entityId,
+      fromComponentType: ComponentType.PersonDetails,
+      toComponentId: roles[0].id, // HOK
+      toEntityId: roles[0].entityId,
+      toComponentType: ComponentType.RoleDetails,
+    },
+  },
+  {
+    id: '2f6fb6d6-1cf9-4d6c-9945-029bdd699dfa',
+    entityId: '1a52e4e6-44cc-4f9f-b72e-019076e531c6',
+    type: ComponentType.MemberOf,
+    payload: {
+      fromComponentId: people[1].id,
+      fromEntityId: people[1].entityId,
+      fromComponentType: ComponentType.PersonDetails,
+      toComponentId: roles[2].id, // Consultant
+      toEntityId: roles[2].entityId,
+      toComponentType: ComponentType.RoleDetails,
+    },
+  },
+];
+
+export const disciplineMemberships: MemberOfComponent[] = [
+  {
+    id: '3e4364e2-adfc-4669-aa47-d7e594db1165',
+    entityId: 'cd5e7543-c266-4e3c-954f-4e59afaccb45',
+    type: ComponentType.MemberOf,
+    payload: {
+      fromComponentId: people[0].id,
+      fromEntityId: people[0].entityId,
+      fromComponentType: ComponentType.PersonDetails,
+      toComponentId: disciplines[0].id, // Arch
+      toEntityId: disciplines[0].entityId,
+      toComponentType: ComponentType.DisciplineDetails,
+    },
+  },
+  {
+    id: 'ff109932-6a1f-4e76-9950-29754065d5ad',
+    entityId: '6acc8de8-89f3-4f19-9c8b-5757c48103af',
+    type: ComponentType.MemberOf,
+    payload: {
+      fromComponentId: people[1].id,
+      fromEntityId: people[1].entityId,
+      fromComponentType: ComponentType.PersonDetails,
+      toComponentId: disciplines[1].id, // Structure
+      toEntityId: disciplines[1].entityId,
+      toComponentType: ComponentType.DisciplineDetails,
+    },
+  },
+];
+
+export const projectOneContainer = [
+  projects[0],
+  ...people,
+  ...serviceDetails,
+  ...serviceGroups,
+  ...serviceMemberships,
+  ...roles,
+  ...roleMemberships,
+  ...disciplines,
+  ...disciplineMemberships,
 ];

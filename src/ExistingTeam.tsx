@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import {
   DisciplineDetailsComponent,
+  PersonDetailsComponent,
   ProjectDetailsComponent,
   RoleDetailsComponent,
   ServiceDetailsComponent,
@@ -13,48 +14,23 @@ import TableDataCell from './components/Table/TableDataCell';
 import TableHead from './components/Table/TableHead';
 import TableHeaderCell from './components/Table/TableHeaderCell';
 import TableRow from './components/Table/TableRow';
-import { roles } from './api/mockData';
-import { disciplines } from './api/mockData';
 import ExistingTeamUserRow from './ExistingTeamUserRow';
 import Button, { ButtonType } from './components/Button';
+import { getPeople, getServices } from './db';
 
-interface Service {
-  id: string;
-  name: string;
-}
+export interface Person {
+  personDetails: PersonDetailsComponent;
+  roleDetails: RoleDetailsComponent | undefined;
+  disciplineDetails: DisciplineDetailsComponent | undefined;
 
-export interface ExistingUser {
-  firstName: string;
-  lastName: string;
-  emailAddress: string;
-  discipline: DisciplineDetailsComponent;
-  role: RoleDetailsComponent;
-  services: Service[];
+  // set of service entity ids
+  services: Set<string>;
 }
 
 interface Props {
   project: ProjectDetailsComponent | null;
-  services: ServiceDetailsComponent[] | null;
+  containerIsAddedToDb: boolean;
 }
-
-const placeholderUsers = [
-  {
-    firstName: 'Michael',
-    lastName: 'Davis',
-    emailAddress: 'mdavis@example.com',
-    discipline: disciplines[0], // Arch
-    role: roles[0], // HOK
-    services: [],
-  },
-  {
-    firstName: 'Emily',
-    lastName: 'Lee',
-    emailAddress: 'elee@example.com',
-    discipline: disciplines[1], // Structure,
-    role: roles[2], // Consultant
-    services: [],
-  },
-];
 
 export interface UserChanges {
   discipline?: DisciplineDetailsComponent;
@@ -64,22 +40,39 @@ export interface UserChanges {
 // map from array index to user changes
 export type UsersChanges = Record<number, UserChanges>;
 
-const ExistingTeam: React.FC<Props> = ({ project, services }) => {
-  const [existingUsers, setExistingUsers] = useState([] as ExistingUser[]);
+const ExistingTeam: React.FC<Props> = ({ project, containerIsAddedToDb }) => {
+  const [existingUsers, setExistingUsers] = useState([] as Person[]);
+
+  const [services, setServices] = useState([] as ServiceDetailsComponent[]);
 
   const [usersChanges, setUsersChanges] = useState({} as UsersChanges);
 
-  const [stateExistingUsers, setStateExistingUsers] = useState(
-    [] as ExistingUser[]
-  );
+  const [stateExistingUsers, setStateExistingUsers] = useState([] as Person[]);
 
   useEffect(() => {
-    if (project) {
-      setExistingUsers(placeholderUsers);
-    } else {
+    if (!project || !containerIsAddedToDb) {
       setExistingUsers([]);
+      return;
     }
-  }, [project]);
+
+    let ignore = false;
+
+    const projectEntityId = project.entityId;
+
+    Promise.all([
+      getPeople(projectEntityId),
+      getServices(projectEntityId),
+    ]).then(([people, services]) => {
+      if (!ignore) {
+        setExistingUsers(people);
+        setServices(services);
+      }
+    });
+
+    return () => {
+      ignore = true;
+    };
+  }, [project, containerIsAddedToDb]);
 
   useEffect(() => {
     setStateExistingUsers(existingUsers);
@@ -128,7 +121,7 @@ const ExistingTeam: React.FC<Props> = ({ project, services }) => {
               <TableHeaderCell>Email</TableHeaderCell>
               <TableHeaderCell>Discipline</TableHeaderCell>
               <TableHeaderCell>Role</TableHeaderCell>
-              {(services || []).map((s) => (
+              {services.map((s) => (
                 <TableHeaderCell key={s.id}>{s.payload.name}</TableHeaderCell>
               ))}
             </TableRow>
@@ -140,7 +133,7 @@ const ExistingTeam: React.FC<Props> = ({ project, services }) => {
                   <ExistingTeamUserRow
                     key={idx}
                     idx={idx}
-                    user={user}
+                    person={user}
                     services={services}
                     userChanges={usersChanges[idx]}
                     setUserChanges={setUserChanges}

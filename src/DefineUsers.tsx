@@ -106,7 +106,7 @@ const DefineUsers: React.FC<Props> = ({
         <Button
           buttonType={ButtonType.Primary}
           type="submit"
-          disabled={!enabled || !users.length} // TODO: check whether all fields are complete for each user
+          disabled={!enabled || !users.length}
           className="order-last grow md:order-1 md:grow-0"
         >
           Submit

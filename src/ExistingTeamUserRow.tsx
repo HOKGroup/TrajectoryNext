@@ -5,14 +5,14 @@ import {
   RoleDetailsComponent,
   ServiceDetailsComponent,
 } from './api/types';
-import { type ExistingUser, type UserChanges } from './ExistingTeam';
+import { type Person, type UserChanges } from './ExistingTeam';
 import TableRow from './components/Table/TableRow';
 import TableDataCell from './components/Table/TableDataCell';
 import Select from './components/Select';
 import { disciplines, roles } from './api/mockData';
 
 interface Props {
-  user: ExistingUser;
+  person: Person;
   idx: number;
   services: ServiceDetailsComponent[];
   userChanges: UserChanges | undefined;
@@ -20,7 +20,7 @@ interface Props {
 }
 
 const ExistingTeamUserRow: FC<Props> = ({
-  user,
+  person,
   idx,
   services,
   userChanges,
@@ -30,14 +30,14 @@ const ExistingTeamUserRow: FC<Props> = ({
     (discipline: SingleValue<DisciplineDetailsComponent>) => {
       if (!discipline) return;
 
-      const existingDiscipline = user.discipline;
+      const existingDiscipline = person.disciplineDetails;
 
       const newUserChanges: UserChanges = {
-        ...(userChanges || {}),
+        ...(userChanges ?? {}),
         discipline,
       };
 
-      if (existingDiscipline.id === discipline.id) {
+      if (existingDiscipline?.id === discipline.id) {
         delete newUserChanges.discipline;
       }
 
@@ -47,21 +47,21 @@ const ExistingTeamUserRow: FC<Props> = ({
         setUserChanges(idx, newUserChanges);
       }
     },
-    [idx, user, userChanges, setUserChanges]
+    [idx, person, userChanges, setUserChanges]
   );
 
   const handleChangeRole = useCallback(
     (role: SingleValue<RoleDetailsComponent>) => {
       if (!role) return;
 
-      const existingRole = user.role;
+      const existingRole = person.roleDetails;
 
       const newUserChanges: UserChanges = {
-        ...(userChanges || {}),
+        ...(userChanges ?? {}),
         role,
       };
 
-      if (existingRole.id === role.id) {
+      if (existingRole?.id === role.id) {
         delete newUserChanges.role;
       }
 
@@ -71,7 +71,7 @@ const ExistingTeamUserRow: FC<Props> = ({
         setUserChanges(idx, newUserChanges);
       }
     },
-    [idx, user, userChanges, setUserChanges]
+    [idx, person, userChanges, setUserChanges]
   );
 
   const getRoleOptionValue = useCallback(
@@ -96,14 +96,20 @@ const ExistingTeamUserRow: FC<Props> = ({
     []
   );
 
-  const discipline = userChanges?.discipline ?? user.discipline;
-  const role = userChanges?.role ?? user.role;
+  const discipline = userChanges?.discipline ?? person.disciplineDetails;
+  const role = userChanges?.role ?? person.roleDetails;
 
   return (
-    <TableRow key={user.emailAddress}>
-      <TableDataCell data-label="First">{user.firstName}</TableDataCell>
-      <TableDataCell data-label="Last">{user.lastName}</TableDataCell>
-      <TableDataCell data-label="Email">{user.emailAddress}</TableDataCell>
+    <TableRow key={person.personDetails.payload.emailAddress}>
+      <TableDataCell data-label="First">
+        {person.personDetails.payload.firstName}
+      </TableDataCell>
+      <TableDataCell data-label="Last">
+        {person.personDetails.payload.lastName}
+      </TableDataCell>
+      <TableDataCell data-label="Email">
+        {person.personDetails.payload.emailAddress}
+      </TableDataCell>
       <TableDataCell data-label="Discipline">
         <Select
           isClearable={false}
@@ -135,8 +141,12 @@ const ExistingTeamUserRow: FC<Props> = ({
           data-label={s.payload.name}
           className="break-normal"
         >
-          {/* TODO: value, onChange */}
-          <input type="checkbox" />
+          {/* TODO: onChange */}
+          <input
+            type="checkbox"
+            checked={person.services.has(s.entityId)}
+            readOnly={true}
+          />
         </TableDataCell>
       ))}
     </TableRow>

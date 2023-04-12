@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useEffect, useCallback, useState } from 'react';
 import UserEmailsInput from './UserEmailsInput';
 import { ParsedUser } from './parseUserEmails';
 import DefineUsers from './DefineUsers';
@@ -7,7 +7,8 @@ import ExistingTeam from './ExistingTeam';
 import DarkModeToggle from './DarkModeToggle';
 import hokLogo from './assets/hokLogo.svg';
 import { ProjectDetailsComponent } from './api/types';
-import { services } from './api/mockData';
+import { getProjectContainer } from './api';
+import { insertAllFromContainer } from './db';
 
 function App() {
   const [selectedProject, setSelectedProject] = useState(
@@ -23,6 +24,32 @@ function App() {
   const clearParsedUsers = useCallback(() => {
     setParsedUsers([]);
   }, []);
+
+  const [containerIsAddedToDb, setContainerIsAddedToDb] = useState(false);
+
+  useEffect(() => {
+    setContainerIsAddedToDb(false);
+
+    if (!selectedProject) {
+      return;
+    }
+
+    let ignore = false;
+
+    const projectEntityId = selectedProject.entityId;
+
+    const container = getProjectContainer(projectEntityId);
+
+    insertAllFromContainer(projectEntityId, container);
+
+    if (!ignore) {
+      setContainerIsAddedToDb(true);
+    }
+
+    return () => {
+      ignore = true;
+    };
+  }, [selectedProject]);
 
   return (
     <>
@@ -52,7 +79,10 @@ function App() {
             parsedUsers={parsedUsers}
             clearParsedUsers={clearParsedUsers}
           />
-          <ExistingTeam project={selectedProject} services={services} />
+          <ExistingTeam
+            project={selectedProject}
+            containerIsAddedToDb={containerIsAddedToDb}
+          />
         </div>
       </main>
     </>
