@@ -9,6 +9,7 @@ function Select<
     <ReactSelect
       unstyled={true}
       isClearable={true || props.isClearable}
+      menuPlacement={'auto' || props.menuPlacement}
       {...props}
       classNames={{
         dropdownIndicator: (_state) => 'text-black/50 cursor-pointer',

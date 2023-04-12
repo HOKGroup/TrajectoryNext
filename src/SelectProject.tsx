@@ -25,13 +25,13 @@ const SelectProject: React.FC<Props> = ({
   const noOptionsMessage = useCallback(() => 'No projects found.', []);
 
   const getProjectOptionValue = useCallback(
-    (project: SingleValue<ProjectDetailsComponent>) => project?.id ?? '',
+    (project: ProjectDetailsComponent) => project.id,
     []
   );
 
   const getProjectOptionLabel = useCallback(
-    (project: SingleValue<ProjectDetailsComponent>) =>
-      project?.payload.name ?? '',
+    (project: ProjectDetailsComponent) =>
+      [project.payload.number, project.payload.alias].join(' ').trim(),
     []
   );
 
