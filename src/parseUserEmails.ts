@@ -81,37 +81,6 @@ export interface ParseUserEmailsResult {
   errors: Array<string>;
 }
 
-function validateUniqueEmails(parseResult: ParseUserEmailsResult) {
-  const emailAddressesSet = new Set<string>();
-  const duplicateEmailAddressesSet = new Set<string>();
-
-  parseResult.values.forEach((v) => {
-    if (emailAddressesSet.has(v.emailAddress)) {
-      duplicateEmailAddressesSet.add(v.emailAddress);
-    } else {
-      emailAddressesSet.add(v.emailAddress);
-    }
-  });
-
-  const duplicateEmailAddressesArr = Array.from(duplicateEmailAddressesSet);
-
-  if (duplicateEmailAddressesArr.length === 0) {
-    return parseResult;
-  }
-
-  return {
-    ...parseResult,
-    success: false,
-    values: parseResult.values.filter(
-      (v) => !duplicateEmailAddressesSet.has(v.emailAddress)
-    ),
-    errors: [
-      ...parseResult.errors,
-      ...duplicateEmailAddressesArr.map((e) => `Duplicate email: ${e}`),
-    ],
-  };
-}
-
 export function parseUserEmails(input: string): ParseUserEmailsResult {
   const initialValue: ParseUserEmailsResult = {
     success: true,
@@ -136,5 +105,5 @@ export function parseUserEmails(input: string): ParseUserEmailsResult {
       return acc;
     }, initialValue);
 
-  return validateUniqueEmails(parsed);
+  return parsed;
 }
