@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import UserEmailsInput from './UserEmailsInput';
 import { ParsedUser } from './parseUserEmails';
 import DefineUsers from './DefineUsers';
@@ -15,6 +15,14 @@ function App() {
   );
 
   const [parsedUsers, setParsedUsers] = useState([] as ParsedUser[]);
+
+  const addParsedUsers = useCallback((newParsedUsers: ParsedUser[]) => {
+    setParsedUsers((parsedUsers) => [...parsedUsers, ...newParsedUsers]);
+  }, []);
+
+  const clearParsedUsers = useCallback(() => {
+    setParsedUsers([]);
+  }, []);
 
   return (
     <>
@@ -37,9 +45,13 @@ function App() {
           />
           <UserEmailsInput
             enabled={!!selectedProject}
-            setParsedUsers={setParsedUsers}
+            addParsedUsers={addParsedUsers}
           />
-          <DefineUsers enabled={!!selectedProject} parsedUsers={parsedUsers} />
+          <DefineUsers
+            enabled={!!selectedProject}
+            parsedUsers={parsedUsers}
+            clearParsedUsers={clearParsedUsers}
+          />
           <ExistingTeam project={selectedProject} services={services} />
         </div>
       </main>
