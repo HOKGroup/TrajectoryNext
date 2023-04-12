@@ -87,7 +87,7 @@ const DefineUsers: React.FC<Props> = ({
           <TableBody>
             {!users.length && (
               <TableRow>
-                <TableDataCell colSpan={6}>No users defined.</TableDataCell>
+                <TableDataCell colSpan={7}>No users defined.</TableDataCell>
               </TableRow>
             )}
             {users.map((user, idx) => (
