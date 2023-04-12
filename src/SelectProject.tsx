@@ -31,7 +31,9 @@ const SelectProject: React.FC<Props> = ({
 
   const getProjectOptionLabel = useCallback(
     (project: SingleValue<ProjectDetailsComponent>) =>
-      project?.payload.name ?? '',
+      [project?.payload.number || '', project?.payload.alias || '']
+        .join(' ')
+        .trim(),
     []
   );
 
