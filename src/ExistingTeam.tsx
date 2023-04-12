@@ -16,7 +16,7 @@ import TableHeaderCell from './components/Table/TableHeaderCell';
 import TableRow from './components/Table/TableRow';
 import ExistingTeamUserRow from './ExistingTeamUserRow';
 import Button, { ButtonType } from './components/Button';
-import { getPeople, getServices } from './db';
+import { DB, getPeople, getServices } from './db';
 
 export interface Person {
   personDetails: PersonDetailsComponent;
@@ -30,6 +30,7 @@ export interface Person {
 interface Props {
   project: ProjectDetailsComponent | null;
   containerIsAddedToDb: boolean;
+  db: DB | undefined;
 }
 
 export interface UserChanges {
@@ -40,7 +41,11 @@ export interface UserChanges {
 // map from array index to user changes
 export type UsersChanges = Record<number, UserChanges>;
 
-const ExistingTeam: React.FC<Props> = ({ project, containerIsAddedToDb }) => {
+const ExistingTeam: React.FC<Props> = ({
+  project,
+  containerIsAddedToDb,
+  db,
+}) => {
   const [existingUsers, setExistingUsers] = useState([] as Person[]);
 
   const [services, setServices] = useState([] as ServiceDetailsComponent[]);
@@ -50,29 +55,30 @@ const ExistingTeam: React.FC<Props> = ({ project, containerIsAddedToDb }) => {
   const [stateExistingUsers, setStateExistingUsers] = useState([] as Person[]);
 
   useEffect(() => {
-    if (!project || !containerIsAddedToDb) {
+    if (!project || !containerIsAddedToDb || !db) {
       setExistingUsers([]);
       return;
     }
 
     let ignore = false;
 
-    const projectEntityId = project.entityId;
-
-    Promise.all([
-      getPeople(projectEntityId),
-      getServices(projectEntityId),
-    ]).then(([people, services]) => {
-      if (!ignore) {
-        setExistingUsers(people);
-        setServices(services);
-      }
-    });
+    Promise.all([getPeople(db), getServices(db)])
+      .then(([people, services]) => {
+        if (!ignore) {
+          setExistingUsers(people);
+          setServices(services);
+        }
+      })
+      .catch(() => {
+        if (!ignore) {
+          setExistingUsers([]);
+        }
+      });
 
     return () => {
       ignore = true;
     };
-  }, [project, containerIsAddedToDb]);
+  }, [project, containerIsAddedToDb, db]);
 
   useEffect(() => {
     setStateExistingUsers(existingUsers);

@@ -1,4 +1,4 @@
-import { openDB, DBSchema } from 'idb';
+import { openDB, DBSchema, IDBPDatabase } from 'idb';
 import {
   Container,
   CompanyDetailsComponent,
@@ -12,7 +12,9 @@ import {
   ServiceGroupComponent,
 } from '../api/types';
 
-interface ComponentDB extends DBSchema {
+export type DB = IDBPDatabase<ComponentDB>;
+
+export interface ComponentDB extends DBSchema {
   [ComponentType.CompanyDetails]: {
     key: string;
     value: CompanyDetailsComponent;
@@ -147,24 +149,16 @@ export const open = async (projectEntityId: string) => {
   });
 };
 
-export const getPeople = async (projectEntityId: string) => {
-  const db = await open(projectEntityId);
-
+export const getPeople = async (db: DB) => {
   const people = await db.getAll(ComponentType.PersonDetails);
 
   return Promise.all(
     people.map(async (p) => {
-      const roleDetails = await getRoleDetailsForPerson(projectEntityId, p.id);
+      const roleDetails = await getRoleDetailsForPerson(db, p.id);
 
-      const disciplineDetails = await getDisciplineDetailsForPerson(
-        projectEntityId,
-        p.id
-      );
+      const disciplineDetails = await getDisciplineDetailsForPerson(db, p.id);
 
-      const serviceMemberships = await getServiceMembershipsForPerson(
-        projectEntityId,
-        p.id
-      );
+      const serviceMemberships = await getServiceMembershipsForPerson(db, p.id);
 
       const services = new Set<string>();
 
@@ -182,30 +176,22 @@ export const getPeople = async (projectEntityId: string) => {
   );
 };
 
-export const getRoles = async (projectEntityId: string) => {
-  const db = await open(projectEntityId);
-
+export const getRoles = async (db: DB) => {
   return db.getAll(ComponentType.RoleDetails);
 };
 
-export const getDisciplines = async (projectEntityId: string) => {
-  const db = await open(projectEntityId);
-
+export const getDisciplines = async (db: DB) => {
   return db.getAll(ComponentType.DisciplineDetails);
 };
 
-export const getServices = async (projectEntityId: string) => {
-  const db = await open(projectEntityId);
-
+export const getServices = async (db: DB) => {
   return db.getAll(ComponentType.ServiceDetails);
 };
 
 export const getServicesForPerson = async (
-  projectEntityId: string,
+  db: DB,
   personComponentId: string
 ) => {
-  const db = await open(projectEntityId);
-
   const serviceGroupMemberships = await db.getAllFromIndex(
     ComponentType.MemberOf,
     'byFromComponentIdAndTypes',
@@ -224,11 +210,9 @@ export const getServicesForPerson = async (
 };
 
 export const getRoleDetailsForPerson = async (
-  projectEntityId: string,
+  db: DB,
   personComponentId: string
 ) => {
-  const db = await open(projectEntityId);
-
   const roleMembership = await db.getFromIndex(
     ComponentType.MemberOf,
     'byFromComponentIdAndTypes',
@@ -246,11 +230,9 @@ export const getRoleDetailsForPerson = async (
 };
 
 export const getDisciplineDetailsForPerson = async (
-  projectEntityId: string,
+  db: DB,
   personComponentId: string
 ) => {
-  const db = await open(projectEntityId);
-
   const disciplineMembership = await db.getFromIndex(
     ComponentType.MemberOf,
     'byFromComponentIdAndTypes',
@@ -272,11 +254,9 @@ export const getDisciplineDetailsForPerson = async (
 };
 
 export const getServiceMembershipsForPerson = async (
-  projectEntityId: string,
+  db: DB,
   personComponentId: string
 ) => {
-  const db = await open(projectEntityId);
-
   const serviceMemberships = await db.getAllFromIndex(
     ComponentType.MemberOf,
     'byFromComponentIdAndTypes',
@@ -286,12 +266,7 @@ export const getServiceMembershipsForPerson = async (
   return serviceMemberships;
 };
 
-export const insertAllFromContainer = async (
-  projectEntityId: string,
-  container: Container
-) => {
-  const db = await open(projectEntityId);
-
+export const insertAllFromContainer = async (db: DB, container: Container) => {
   const transaction = db.transaction(Object.values(ComponentType), 'readwrite');
 
   return Promise.all([

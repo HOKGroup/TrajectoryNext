@@ -8,9 +8,11 @@ import DarkModeToggle from './DarkModeToggle';
 import hokLogo from './assets/hokLogo.svg';
 import { ProjectDetailsComponent } from './api/types';
 import { getProjectContainer } from './api';
-import { insertAllFromContainer } from './db';
+import { type DB, insertAllFromContainer, open } from './db';
 
 function App() {
+  const [db, setDb] = useState(undefined as DB | undefined);
+
   const [selectedProject, setSelectedProject] = useState(
     null as ProjectDetailsComponent | null
   );
@@ -28,27 +30,40 @@ function App() {
   const [containerIsAddedToDb, setContainerIsAddedToDb] = useState(false);
 
   useEffect(() => {
-    setContainerIsAddedToDb(false);
-
-    if (!selectedProject) {
-      return;
-    }
-
     let ignore = false;
 
-    const projectEntityId = selectedProject.entityId;
+    let closeDb = (): undefined | void => undefined;
 
-    const container = getProjectContainer(projectEntityId);
+    if (selectedProject) {
+      const projectEntityId = selectedProject.entityId;
 
-    insertAllFromContainer(projectEntityId, container);
+      open(projectEntityId)
+        .then((openedDb) => {
+          setDb(openedDb);
+          closeDb = () => openedDb.close();
 
-    if (!ignore) {
-      setContainerIsAddedToDb(true);
+          const container = getProjectContainer(projectEntityId);
+
+          return insertAllFromContainer(openedDb, container);
+        })
+        .then(() => {
+          if (!ignore) {
+            setContainerIsAddedToDb(true);
+          }
+        });
+
+      return () => {
+        ignore = true;
+        closeDb();
+      };
+    } else {
+      setDb((db) => {
+        db && db.close;
+        return undefined;
+      });
+
+      setContainerIsAddedToDb(false);
     }
-
-    return () => {
-      ignore = true;
-    };
   }, [selectedProject]);
 
   return (
@@ -82,6 +97,7 @@ function App() {
           <ExistingTeam
             project={selectedProject}
             containerIsAddedToDb={containerIsAddedToDb}
+            db={db}
           />
         </div>
       </main>
