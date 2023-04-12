@@ -118,11 +118,11 @@ const DefineUsersUserRow: FC<Props> = ({ user, setUser, removeUser, idx }) => {
         <Button
           buttonType={ButtonType.Warning}
           onClick={handleRemoveUser}
-          className="px-2 py-1 text-sm font-extrabold lg:px-3 lg:py-0"
+          className="px-2 py-1 text-sm font-extrabold lg:px-2 lg:py-0 xl:p-2"
         >
           <span className="flex flex-row items-center gap-1">
             <div className="lg:hidden">Remove</div>
-            <IconXMark className="h-4 w-4 lg:h-6 lg:w-6" />
+            <IconXMark className="h-4 w-4 lg:h-8 lg:w-8 xl:h-4 xl:w-4" />
           </span>
         </Button>
       </TableDataCell>
