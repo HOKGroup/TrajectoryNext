@@ -27,6 +27,40 @@ const ExistingTeamUserRow: FC<Props> = ({
   userChanges,
   setUserChanges,
 }) => {
+  const handleChangeServices = useCallback(
+    (serviceEntityId: string) => {
+      let services: Set<string>;
+
+      if (userChanges?.services) {
+        services = new Set(userChanges.services);
+      } else {
+        services = new Set();
+      }
+
+      if (services.has(serviceEntityId)) {
+        services.delete(serviceEntityId);
+      } else {
+        services.add(serviceEntityId);
+      }
+
+      const newUserChanges: UserChanges = {
+        ...(userChanges ?? {}),
+        services,
+      };
+
+      if (newUserChanges.services && !newUserChanges.services.size) {
+        delete newUserChanges.services;
+      }
+
+      if (!Object.keys(newUserChanges).length) {
+        setUserChanges(idx, undefined);
+      } else {
+        setUserChanges(idx, newUserChanges);
+      }
+    },
+    [idx, userChanges, setUserChanges]
+  );
+
   const handleChangeFirstName = useCallback(
     (event: FormEvent<HTMLInputElement>) => {
       const firstName = event.currentTarget.value;
@@ -200,11 +234,16 @@ const ExistingTeamUserRow: FC<Props> = ({
           data-label={s.payload.name}
           className="break-normal"
         >
-          {/* TODO: onChange */}
+          {/* TODO: extract to component and useCallback for onChange */}
           <input
             type="checkbox"
-            checked={person.services.has(s.entityId)}
-            readOnly={true}
+            className="h-4 w-4"
+            checked={
+              person.services.has(s.entityId)
+                ? Boolean(!userChanges?.services?.has(s.entityId))
+                : Boolean(userChanges?.services?.has(s.entityId))
+            }
+            onChange={() => handleChangeServices(s.entityId)}
           />
         </TableDataCell>
       ))}
