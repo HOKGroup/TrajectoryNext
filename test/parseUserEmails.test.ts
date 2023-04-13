@@ -82,6 +82,94 @@ describe('parseUserEmails', () => {
     ]);
   });
 
+  test('parses multiple users separated by comma', () => {
+    const input =
+      'Alice Jones <ajones@example.com>, Bob Smith <bsmith@example.com>, Charlie Brown <cbrown@example.com>';
+    const parsed = parseUserEmails(input);
+
+    expect(parsed.success).toBeTruthy();
+
+    expect(parsed.values).toEqual([
+      {
+        firstName: 'Alice',
+        lastName: 'Jones',
+        emailAddress: 'ajones@example.com',
+      },
+      {
+        firstName: 'Bob',
+        lastName: 'Smith',
+        emailAddress: 'bsmith@example.com',
+      },
+      {
+        firstName: 'Charlie',
+        lastName: 'Brown',
+        emailAddress: 'cbrown@example.com',
+      },
+    ]);
+  });
+
+  test('parses multiple users separated by newlines', () => {
+    const input = `
+    Alice Jones <ajones@example.com>
+    Bob Smith <bsmith@example.com>
+    Charlie Brown <cbrown@example.com>
+    `;
+    const parsed = parseUserEmails(input);
+
+    expect(parsed.success).toBeTruthy();
+
+    expect(parsed.values).toEqual([
+      {
+        firstName: 'Alice',
+        lastName: 'Jones',
+        emailAddress: 'ajones@example.com',
+      },
+      {
+        firstName: 'Bob',
+        lastName: 'Smith',
+        emailAddress: 'bsmith@example.com',
+      },
+      {
+        firstName: 'Charlie',
+        lastName: 'Brown',
+        emailAddress: 'cbrown@example.com',
+      },
+    ]);
+  });
+
+  test('parses multiple users separated by different separators', () => {
+    const input = `
+    Alice Jones <ajones@example.com>
+    Bob Smith <bsmith@example.com>; Charlie Brown <cbrown@example.com>, Dan Theman <dantheman@example.com>;
+    `;
+    const parsed = parseUserEmails(input);
+
+    expect(parsed.success).toBeTruthy();
+
+    expect(parsed.values).toEqual([
+      {
+        firstName: 'Alice',
+        lastName: 'Jones',
+        emailAddress: 'ajones@example.com',
+      },
+      {
+        firstName: 'Bob',
+        lastName: 'Smith',
+        emailAddress: 'bsmith@example.com',
+      },
+      {
+        firstName: 'Charlie',
+        lastName: 'Brown',
+        emailAddress: 'cbrown@example.com',
+      },
+      {
+        firstName: 'Dan',
+        lastName: 'Theman',
+        emailAddress: 'dantheman@example.com',
+      },
+    ]);
+  });
+
   test('parses an email address in angle brackets with no name', () => {
     const input = '<jdoe@example.com>';
     const parsed = parseUserEmails(input);

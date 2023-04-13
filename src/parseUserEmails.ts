@@ -81,6 +81,8 @@ export interface ParseUserEmailsResult {
   errors: Array<string>;
 }
 
+const splitRegex = /[;\n,]/;
+
 export function parseUserEmails(input: string): ParseUserEmailsResult {
   const initialValue: ParseUserEmailsResult = {
     success: true,
@@ -89,7 +91,7 @@ export function parseUserEmails(input: string): ParseUserEmailsResult {
   };
 
   const parsed = input
-    .split(';')
+    .split(splitRegex)
     .map((str) => str.trim())
     .filter((str) => str.length > 0)
     .reduce((acc, str) => {
