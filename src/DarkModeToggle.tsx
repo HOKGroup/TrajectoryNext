@@ -98,19 +98,11 @@ const DarkModeToggle: FC = () => {
         onClick={toggleDropdown}
       >
         {isDarkMode ? (
-          <IconMoon
-            alt="Dark Mode"
-            className={classNames('h-4 w-4', { invert: !isDarkMode })}
-          />
+          <IconMoon alt="Dark Mode" className="h-4 w-4 invert dark:invert-0" />
         ) : (
-          <IconSun
-            alt="Light Mode"
-            className={classNames('h-4 w-4', { invert: !isDarkMode })}
-          />
+          <IconSun alt="Light Mode" className="h-4 w-4 invert dark:invert-0" />
         )}{' '}
-        <IconChevronDown
-          className={classNames('h-4 w-4', { invert: !isDarkMode })}
-        />
+        <IconChevronDown className="h-4 w-4 invert dark:invert-0" />
       </Button>
       <div
         id="dropdown"
@@ -129,16 +121,12 @@ const DarkModeToggle: FC = () => {
               type="button"
               className={classNames(
                 'block w-full px-4 py-2 text-left hover:bg-gray-200 dark:hover:bg-gray-600 dark:hover:text-slate-50',
-                { '!bg-blue-500 !text-slate-50': isDarkMode && !isSystemTheme }
+                { 'dark:!bg-blue-500 dark:!text-slate-50': !isSystemTheme }
               )}
               onClick={setDarkMode}
             >
               <span className="flex">
-                <IconMoon
-                  className={classNames('mr-4 h-5 w-5', {
-                    invert: isDarkMode,
-                  })}
-                />
+                <IconMoon className="mr-4 h-5 w-5 dark:invert" />
                 Dark
               </span>
             </button>
@@ -153,11 +141,7 @@ const DarkModeToggle: FC = () => {
               onClick={setLightMode}
             >
               <span className="flex">
-                <IconSun
-                  className={classNames('mr-4 h-5 w-5', {
-                    invert: isDarkMode,
-                  })}
-                />
+                <IconSun className="mr-4 h-5 w-5 dark:invert" />
                 Light
               </span>
             </button>
