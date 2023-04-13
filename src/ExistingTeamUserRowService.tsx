@@ -45,7 +45,7 @@ const ExistingTeamUserRowService: FC<Props> = ({
           }
         )}
       >
-        {isChecked && <IconCheck className="invert" />}
+        {isChecked && <IconCheck className="h-6 w-6 invert" />}
       </span>
     </label>
   );
