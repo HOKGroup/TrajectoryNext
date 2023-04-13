@@ -12,6 +12,7 @@ import Select from './components/Select';
 import { disciplines, roles } from './api/mockData';
 import Input from './components/Input';
 import ExistingTeamUserRowService from './ExistingTeamUserRowService';
+import classNames from 'classnames';
 
 interface Props {
   person: Person;
@@ -192,6 +193,7 @@ const ExistingTeamUserRow: FC<Props> = ({
           placeholder="First name"
           value={firstName}
           onInput={handleChangeFirstName}
+          className={classNames({ 'border-green-600': userChanges?.firstName })}
         />
       </TableDataCell>
       <TableDataCell data-label="Last">
@@ -199,6 +201,7 @@ const ExistingTeamUserRow: FC<Props> = ({
           placeholder="Last name"
           value={lastName}
           onInput={handleChangeLastName}
+          className={classNames({ 'border-green-600': userChanges?.lastName })}
         />
       </TableDataCell>
       <TableDataCell data-label="Email">
@@ -214,6 +217,12 @@ const ExistingTeamUserRow: FC<Props> = ({
           value={discipline}
           getOptionValue={getDisciplineOptionValue}
           getOptionLabel={getDisciplineOptionLabel}
+          classNames={{
+            control: () =>
+              classNames({
+                'border-green-600': userChanges?.discipline,
+              }),
+          }}
         />
       </TableDataCell>
 
@@ -227,6 +236,12 @@ const ExistingTeamUserRow: FC<Props> = ({
           value={role}
           getOptionValue={getRoleOptionValue}
           getOptionLabel={getRoleOptionLabel}
+          classNames={{
+            control: () =>
+              classNames({
+                'border-green-600': userChanges?.role,
+              }),
+          }}
         />
       </TableDataCell>
       {services.map((s) => (
