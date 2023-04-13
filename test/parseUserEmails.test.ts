@@ -179,7 +179,7 @@ describe('parseUserEmails', () => {
     expect(parsed.values).toEqual([
       {
         firstName: null,
-        lastName: null,
+        lastName: 'Jdoe',
         emailAddress: 'jdoe@example.com',
       },
     ]);
@@ -194,7 +194,7 @@ describe('parseUserEmails', () => {
     expect(parsed.values).toEqual([
       {
         firstName: null,
-        lastName: null,
+        lastName: 'Bsmith',
         emailAddress: 'bsmith@example.com',
       },
     ]);
@@ -338,6 +338,37 @@ describe('parseUserEmails', () => {
         firstName: 'User',
         lastName: 'Two',
         emailAddress: 'uone@example.com',
+      },
+    ]);
+  });
+
+  test('parses name from dot separated email address if not present', () => {
+    const input =
+      'john.doe@example.com; alice.b.jones@example.com; cbrown@example.com; jim-bob.smith@example.com';
+    const parsed = parseUserEmails(input);
+
+    expect(parsed.success).toBeTruthy();
+
+    expect(parsed.values).toEqual([
+      {
+        firstName: 'John',
+        lastName: 'Doe',
+        emailAddress: 'john.doe@example.com',
+      },
+      {
+        firstName: 'Alice B',
+        lastName: 'Jones',
+        emailAddress: 'alice.b.jones@example.com',
+      },
+      {
+        firstName: null,
+        lastName: 'Cbrown',
+        emailAddress: 'cbrown@example.com',
+      },
+      {
+        firstName: 'Jim-Bob',
+        lastName: 'Smith',
+        emailAddress: 'jim-bob.smith@example.com',
       },
     ]);
   });

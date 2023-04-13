@@ -1,13 +1,18 @@
+import { titleCase } from 'title-case';
+
 export enum ParsedUserResultType {
   Error = 'error',
   Success = 'success',
 }
 
-export interface ParsedUser {
+interface ParsedName {
   firstName: string | null;
   lastName: string | null;
-  emailAddress: string;
 }
+
+export type ParsedUser = {
+  emailAddress: string;
+} & ParsedName;
 
 export type ParsedUserError = {
   type: ParsedUserResultType.Error;
@@ -75,6 +80,33 @@ function parseUserEmail(input: string): ParsedUserResult {
   };
 }
 
+function parseNameFromEmail(emailAddress: string): ParsedName {
+  const namePart = emailAddress.split('@')[0];
+  const splitName = namePart.split('.');
+
+  const titleCased = splitName.map(titleCase);
+
+  if (!titleCased.length) {
+    return {
+      firstName: null,
+      lastName: null,
+    };
+  } else if (titleCased.length === 1) {
+    return {
+      firstName: null,
+      lastName: titleCased[0],
+    };
+  }
+
+  const firstName = titleCased.slice(0, titleCased.length - 1).join(' ');
+  const lastName = titleCased[titleCased.length - 1];
+
+  return {
+    firstName,
+    lastName,
+  };
+}
+
 export interface ParseUserEmailsResult {
   success: boolean;
   values: Array<ParsedUser>;
@@ -101,6 +133,12 @@ export function parseUserEmails(input: string): ParseUserEmailsResult {
         acc.success = false;
         acc.errors.push(parsed.value);
       } else {
+        if (!parsed.value.firstName && !parsed.value.lastName) {
+          parsed.value = {
+            ...parsed.value,
+            ...parseNameFromEmail(parsed.value.emailAddress),
+          };
+        }
         acc.values.push(parsed.value);
       }
 
