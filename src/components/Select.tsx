@@ -32,7 +32,7 @@ function Select<
         menu: (_state) => 'mt-2 border-2 bg-white rounded-md drop-shadow-md',
         noOptionsMessage: (_state) => 'text-black/50',
         option: (state) =>
-          'px-2 leading-9 dark:text-slate-950' +
+          'px-2 leading-9 dark:text-gray-950' +
           (state.isFocused ? ' bg-blue-200' : '') +
           (state.isSelected ? ' bg-blue-500 !text-white' : ''),
       }}

@@ -7,7 +7,7 @@ const Input: FC<HTMLProps<HTMLInputElement>> = ({
   ...props
 }) => {
   const className = classNames(
-    'w-full rounded-md border-2 px-2 py-1 text-slate-950 outline-none focus:border-transparent focus:ring focus:ring-blue-300',
+    'w-full rounded-md border-2 px-2 py-1 text-gray-950 outline-none focus:border-transparent focus:ring focus:ring-blue-300',
     propsClassName
   );
 
