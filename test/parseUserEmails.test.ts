@@ -98,7 +98,7 @@ describe('parseUserEmails', () => {
   });
 
   test('parses an email address with no angle brackets and no name', () => {
-    const input = 'jdoe@example.com';
+    const input = 'bsmith@example.com';
     const parsed = parseUserEmails(input);
 
     expect(parsed.success).toBeTruthy();
@@ -107,7 +107,63 @@ describe('parseUserEmails', () => {
       {
         firstName: null,
         lastName: null,
+        emailAddress: 'bsmith@example.com',
+      },
+    ]);
+  });
+
+  test('parses email and name for emails without angle brackets', () => {
+    const input = 'John Doe jdoe@example.com';
+    const parsed = parseUserEmails(input);
+
+    expect(parsed.success).toBeTruthy();
+
+    expect(parsed.values).toEqual([
+      {
+        firstName: 'John',
+        lastName: 'Doe',
         emailAddress: 'jdoe@example.com',
+      },
+    ]);
+  });
+
+  test('parses name correctly with middle name and email without angle brackets', () => {
+    const input = 'John A Doe jdoe@example.com';
+    const parsed = parseUserEmails(input);
+
+    expect(parsed.success).toBeTruthy();
+
+    expect(parsed.values).toEqual([
+      {
+        firstName: 'John A',
+        lastName: 'Doe',
+        emailAddress: 'jdoe@example.com',
+      },
+    ]);
+  });
+
+  test('parses a mixture of emails and names with and without angle brackets', () => {
+    const input =
+      'John Doe jdoe@example.com; Alice D Smith <asmith@example.com>; Charlie B Jones cjones@example.com';
+    const parsed = parseUserEmails(input);
+
+    expect(parsed.success).toBeTruthy();
+
+    expect(parsed.values).toEqual([
+      {
+        firstName: 'John',
+        lastName: 'Doe',
+        emailAddress: 'jdoe@example.com',
+      },
+      {
+        firstName: 'Alice D',
+        lastName: 'Smith',
+        emailAddress: 'asmith@example.com',
+      },
+      {
+        firstName: 'Charlie B',
+        lastName: 'Jones',
+        emailAddress: 'cjones@example.com',
       },
     ]);
   });

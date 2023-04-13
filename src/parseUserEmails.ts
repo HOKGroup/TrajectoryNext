@@ -33,13 +33,13 @@ const parseRegExp = RegExp(
   '(\\S+) ' +
 
   // email address
-  '<(.+@.+)>' +
+  '<?([^\\s<>]+@[^\\s<>]+)>?' +
 
   // end of string
   '$'
 );
 
-const emailOnlyRegExp = /<?(.+@[^>]+)>?/;
+const emailOnlyRegExp = /<?([^\s<]+@[^>\s]+)>?/;
 
 function parseUserEmail(input: string): ParsedUserResult {
   const matches = input.match(parseRegExp);
