@@ -7,8 +7,9 @@ import ExistingTeam from './ExistingTeam';
 import DarkModeToggle from './DarkModeToggle';
 import hokLogo from './assets/hokLogo.svg';
 import { ProjectDetailsComponent } from './api/types';
-import { getProjectContainer } from './api';
-import { type DB, insertAllFromContainer, open } from './db';
+// import { getProjectContainer } from './api';
+import { type DB, open } from './db';
+// import { type DB, insertAllFromContainer, open } from './db';
 
 function App() {
   const [db, setDb] = useState(undefined as DB | undefined);
@@ -27,7 +28,7 @@ function App() {
     setParsedUsers([]);
   }, []);
 
-  const [containerIsAddedToDb, setContainerIsAddedToDb] = useState(false);
+  const [dbIsReady, setDbIsReady] = useState(false);
 
   useEffect(() => {
     let ignore = false;
@@ -42,13 +43,13 @@ function App() {
           setDb(openedDb);
           closeDb = () => openedDb.close();
 
-          const container = getProjectContainer(projectEntityId);
+          // const container = getProjectContainer(projectEntityId);
 
-          return insertAllFromContainer(openedDb, container);
+          // return insertAllFromContainer(openedDb, container);
         })
         .then(() => {
           if (!ignore) {
-            setContainerIsAddedToDb(true);
+            setDbIsReady(true);
           }
         });
 
@@ -62,7 +63,7 @@ function App() {
         return undefined;
       });
 
-      setContainerIsAddedToDb(false);
+      setDbIsReady(false);
     }
   }, [selectedProject]);
 
@@ -96,7 +97,7 @@ function App() {
           />
           <ExistingTeam
             project={selectedProject}
-            containerIsAddedToDb={containerIsAddedToDb}
+            containerIsAddedToDb={dbIsReady}
             db={db}
           />
         </div>
