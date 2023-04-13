@@ -11,6 +11,7 @@ import {
   ServiceDetailsComponent,
   ServiceGroupComponent,
 } from '../api/types';
+import { getProjectContainer } from '../api';
 
 export type DB = IDBPDatabase<ComponentDB>;
 
@@ -81,8 +82,12 @@ export interface ComponentDB extends DBSchema {
 }
 
 export const open = async (projectEntityId: string) => {
-  return openDB<ComponentDB>(projectEntityId, 1, {
+  let dbAlreadyExisted = true;
+
+  const db = await openDB<ComponentDB>(projectEntityId, 1, {
     upgrade(db) {
+      dbAlreadyExisted = false;
+
       const companyDetailsStore = db.createObjectStore(
         ComponentType.CompanyDetails,
         { keyPath: 'id' }
@@ -147,6 +152,16 @@ export const open = async (projectEntityId: string) => {
       ]);
     },
   });
+
+  if (!dbAlreadyExisted) {
+    const container = getProjectContainer(projectEntityId);
+
+    await insertAllFromContainer(db, container);
+  } else {
+    // TODO: Check if DB container data is stale
+  }
+
+  return db;
 };
 
 export const getPeople = async (db: DB) => {
