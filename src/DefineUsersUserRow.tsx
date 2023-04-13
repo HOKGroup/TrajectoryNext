@@ -138,10 +138,12 @@ const DefineUsersUserRow: FC<Props> = ({ user, setUser, removeUser, idx }) => {
         {user.firstName && user.lastName && (
           <Button
             buttonType={ButtonType.Secondary}
-            className="px-2 py-1 text-sm font-extrabold lg:py-0"
+            className="px-2 py-1 text-sm font-extrabold leading-snug lg:px-2 lg:py-0"
             onClick={swapFirstAndLastName}
           >
-            {'Swap First/Last'}
+            {'Swap '}
+            <br className="hidden lg:block" />
+            {'First/Last'}
           </Button>
         )}
       </TableDataCell>

@@ -75,7 +75,7 @@ const DefineUsers: React.FC<Props> = ({
             <TableRow isHeader={true}>
               <TableHeaderCell />
               <TableHeaderCell className="min-w-fit">First</TableHeaderCell>
-              <TableHeaderCell className="w-[8rem]" />
+              <TableHeaderCell className="min-w-fit" />
               <TableHeaderCell className="min-w-fit">Last</TableHeaderCell>
               <TableHeaderCell className="min-w-fit">Email</TableHeaderCell>
               <TableHeaderCell className="min-w-[10rem]">
