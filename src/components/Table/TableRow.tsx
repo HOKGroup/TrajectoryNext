@@ -14,7 +14,7 @@ const TableRow: React.FC<Props & HTMLProps<HTMLTableRowElement>> = ({
   const className = classNames(
     'block lg:table-row border-b',
     {
-      'text-slate-50 dark:text-slate-950': isHeader,
+      'text-gray-50 dark:text-gray-950': isHeader,
       'odd:bg-white even:bg-slate-100 dark:odd:bg-slate-800 dark:even:bg-slate-900':
         !isHeader,
     },

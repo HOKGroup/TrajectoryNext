@@ -94,7 +94,7 @@ const DarkModeToggle: FC = () => {
       <Button
         ref={buttonRef}
         buttonType={ButtonType.Secondary}
-        className="mr-5 inline-flex w-14 items-center justify-around whitespace-nowrap rounded-lg !px-1 py-2 text-center text-sm text-slate-50 sm:mr-10"
+        className="mr-5 inline-flex w-14 items-center justify-around whitespace-nowrap rounded-lg !px-1 py-2 text-center text-sm text-gray-50 sm:mr-10"
         onClick={toggleDropdown}
       >
         {isDarkMode ? (
@@ -120,8 +120,8 @@ const DarkModeToggle: FC = () => {
             <button
               type="button"
               className={classNames(
-                'block w-full px-4 py-2 text-left hover:bg-gray-200 dark:hover:bg-gray-600 dark:hover:text-slate-50',
-                { 'dark:!bg-blue-500 dark:!text-slate-50': !isSystemTheme }
+                'block w-full px-4 py-2 text-left hover:bg-gray-200 dark:hover:bg-gray-600 dark:hover:text-gray-50',
+                { 'dark:!bg-blue-500 dark:!text-gray-50': !isSystemTheme }
               )}
               onClick={setDarkMode}
             >
@@ -135,8 +135,8 @@ const DarkModeToggle: FC = () => {
             <button
               type="button"
               className={classNames(
-                'block w-full px-4 py-2 text-left hover:bg-gray-200 dark:hover:bg-gray-600 dark:hover:text-slate-50',
-                { '!bg-blue-500 !text-slate-50': !isDarkMode && !isSystemTheme }
+                'block w-full px-4 py-2 text-left hover:bg-gray-200 dark:hover:bg-gray-600 dark:hover:text-gray-50',
+                { '!bg-blue-500 !text-gray-50': !isDarkMode && !isSystemTheme }
               )}
               onClick={setLightMode}
             >
@@ -150,8 +150,8 @@ const DarkModeToggle: FC = () => {
             <button
               type="button"
               className={classNames(
-                'block w-full px-4 py-2 text-left hover:bg-gray-200 dark:hover:bg-gray-600 dark:hover:text-slate-50',
-                { '!bg-blue-500 !text-slate-50': isSystemTheme }
+                'block w-full px-4 py-2 text-left hover:bg-gray-200 dark:hover:bg-gray-600 dark:hover:text-gray-50',
+                { '!bg-blue-500 !text-gray-50': isSystemTheme }
               )}
               onClick={setSystem}
             >
