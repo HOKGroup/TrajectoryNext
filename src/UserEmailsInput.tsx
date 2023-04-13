@@ -66,7 +66,7 @@ const UserEmailsInput: React.FC<Props> = ({ enabled, addParsedUsers }) => {
   return (
     <Section>
       <SectionHeading>Paste User Emails</SectionHeading>
-      <form className="flex flex-col gap-2">
+      <form className="flex flex-col">
         <div className="flex flex-col gap-4">
           <div className="text-sm lg:hidden">
             Paste from Outlook. Example:
