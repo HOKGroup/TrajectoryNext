@@ -4,11 +4,10 @@ import { ParsedUser } from './parseUserEmails';
 import DefineUsers from './DefineUsers';
 import SelectProject from './SelectProject';
 import ExistingTeam from './ExistingTeam';
-import DarkModeToggle from './DarkModeToggle';
-import hokLogo from './assets/hokLogo.svg';
 import { ProjectDetailsComponent } from './api/types';
 import { getProjectContainer } from './api';
 import { type DB, insertAllFromContainer, open } from './db';
+import AppHeader from './AppHeader';
 
 function App() {
   const [db, setDb] = useState(undefined as DB | undefined);
@@ -68,17 +67,7 @@ function App() {
 
   return (
     <>
-      <header className="flex flex-row items-center justify-between border-b bg-slate-100 py-2 pl-4 dark:bg-slate-800">
-        <span className="flex items-center">
-          <img src={hokLogo} className="mr-4 h-8 w-8" alt="HOK logo" />
-          <h1 className="whitespace-nowrap text-2xl font-semibold">
-            Trajectory Next
-          </h1>
-        </span>
-        <span>
-          <DarkModeToggle />
-        </span>
-      </header>
+      <AppHeader />
       <main className="grow overflow-y-auto pb-16 pt-4">
         <div className="container flex flex-col gap-6">
           <SelectProject
