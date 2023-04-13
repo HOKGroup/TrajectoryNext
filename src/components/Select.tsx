@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import ReactSelect, { type Props, type GroupBase } from 'react-select';
 
 function Select<
@@ -16,11 +17,18 @@ function Select<
         indicatorSeparator: (_state) => 'bg-black/20 mx-2',
         clearIndicator: (_state) => 'text-black/50 cursor-pointer',
         control: (state) =>
-          'border-2 px-2 rounded-md focus:outline-none bg-white' +
-          (state.isFocused
-            ? ' ring ring-blue-300 outline-none border-transparent'
-            : '') +
-          (props.value ? ' text-black' : ' text-black/50'),
+          classNames(
+            'border-2 px-2 rounded-md focus:outline-none bg-white',
+            {
+              'ring ring-blue-300 outline-none border-transparent':
+                state.isFocused,
+            },
+            {
+              'text-black': props.value,
+              'text-black/50': !props.value,
+            },
+            props.classNames?.control && props.classNames.control(state)
+          ),
         menu: (_state) => 'mt-2 border-2 bg-white rounded-md drop-shadow-md',
         noOptionsMessage: (_state) => 'text-black/50',
         option: (state) =>
