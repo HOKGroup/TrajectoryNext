@@ -1,6 +1,8 @@
 
 ![the picture](https://github.com/HOKGroup/TrajectoryNext/blob/master/TJ_Next_UI.png)
 
+# For Windows Configure Git; git config --global core.autocrlf false
+
 # Available Scripts
 
 In the project directory, you can run:
@@ -50,6 +52,7 @@ Run tests with browser-based interactive UI.
 - `src/`: Top-level components.
 
 # Recommended VSCode Extensions
+## [VS Code for Vite](https://marketplace.visualstudio.com/items?itemName=antfu.vite)
 
 ## [Prettier - Code formatter](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
 
