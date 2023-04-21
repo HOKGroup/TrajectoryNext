@@ -1,5 +1,5 @@
 
-![the picture](../tj_next_ui.png)
+![the picture](https://github.com/HOKGroup/TrajectoryNext/blob/master/TJ_Next_UI.png)
 
 # Available Scripts
 
