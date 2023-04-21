@@ -1,7 +1,7 @@
 
 ![the picture](https://github.com/HOKGroup/TrajectoryNext/blob/master/TJ_Next_UI.png)
 
-# For Windows Configure Git; git config --global core.autocrlf false
+For Windows Configure Git; git config core.autocrlf false
 
 # Available Scripts
 
